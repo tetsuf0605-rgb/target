@@ -1,0 +1,1302 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>target - なつやすみ もくひょう</title>
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2f6fed">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="target">
+<style>
+  :root{
+    --main-color:#2f6fed;
+    --main-color-dark:#1d4fbf;
+    --accent-bg:#eaf1ff;
+    --danger-color:#e5484d;
+    --danger-bg:#fdecec;
+    --success-color:#2f9e44;
+    --text-color:#222831;
+    --sub-text-color:#6b7280;
+    --bg-color:#ffffff;
+    --card-bg:#ffffff;
+    --border-color:#e2e5ea;
+    --radius:14px;
+    --radius-sm:8px;
+    --font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+    --tabbar-height:64px;
+    --header-height:52px;
+    --gap:12px;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    font-family:var(--font-family);
+    color:var(--text-color);
+    background:var(--bg-color);
+    -webkit-tap-highlight-color:transparent;
+  }
+  button,input,select{ font-family:inherit; }
+  #app{
+    max-width:520px;
+    margin:0 auto;
+    min-height:100dvh;
+    display:flex;
+    flex-direction:column;
+    background:var(--bg-color);
+  }
+  .app-header{
+    height:var(--header-height);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-bottom:1px solid var(--border-color);
+    position:sticky;
+    top:0;
+    background:var(--bg-color);
+    z-index:5;
+  }
+  .app-header__title{
+    font-size:18px;
+    margin:0;
+    font-weight:700;
+  }
+  .screen{
+    flex:1;
+    padding:var(--gap);
+    padding-bottom:calc(var(--tabbar-height) + var(--gap));
+  }
+  .tabbar{
+    position:sticky;
+    bottom:0;
+    height:var(--tabbar-height);
+    display:flex;
+    border-top:1px solid var(--border-color);
+    background:var(--bg-color);
+    z-index:5;
+  }
+  .tabbar__btn{
+    flex:1;
+    border:none;
+    background:none;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+    font-size:12px;
+    color:var(--sub-text-color);
+    padding:4px;
+  }
+  .tabbar__btn.is-active{ color:var(--main-color); font-weight:700; }
+  .tabbar__icon{ font-size:22px; line-height:1; }
+
+  .empty-state{
+    margin-top:40px;
+    text-align:center;
+    color:var(--sub-text-color);
+  }
+  .empty-state__text{ font-size:16px; line-height:1.7; margin-bottom:16px; white-space:pre-wrap; }
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:44px;
+    padding:10px 18px;
+    border-radius:var(--radius-sm);
+    border:none;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .btn--primary{ background:var(--main-color); color:#fff; }
+  .btn--primary:active{ background:var(--main-color-dark); }
+  .btn--sub{ background:#f0f1f3; color:var(--text-color); }
+  .btn--danger{ background:var(--danger-color); color:#fff; }
+  .btn--block{ width:100%; }
+  .btn--small{ min-height:36px; padding:6px 12px; font-size:13px; }
+  .btn:disabled{ opacity:.4; }
+
+  .today-banner{
+    background:var(--accent-bg);
+    color:var(--main-color-dark);
+    border-radius:var(--radius-sm);
+    padding:10px 14px;
+    font-weight:700;
+    font-size:14px;
+    margin-bottom:var(--gap);
+    text-align:center;
+  }
+  .date-nav{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:16px;
+    margin-bottom:var(--gap);
+  }
+  .date-nav__btn{
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    border:1px solid var(--border-color);
+    background:#fff;
+    font-size:18px;
+  }
+  .date-nav__label{ font-size:18px; font-weight:700; min-width:140px; text-align:center; }
+
+  .goal-card{
+    background:var(--card-bg);
+    border:1px solid var(--border-color);
+    border-radius:var(--radius);
+    padding:14px;
+    margin-bottom:var(--gap);
+  }
+  .goal-card__title{ font-size:16px; font-weight:700; margin-bottom:6px; }
+  .goal-card__week{ font-size:12px; font-weight:400; color:var(--sub-text-color); margin-left:6px; }
+  .goal-card__target{ font-size:13px; color:var(--sub-text-color); margin-bottom:8px; }
+  .goal-card__big-btn{
+    width:100%;
+    min-height:64px;
+    border-radius:var(--radius-sm);
+    border:2px solid var(--main-color);
+    background:#fff;
+    color:var(--main-color);
+    font-size:20px;
+    font-weight:700;
+  }
+  .goal-card__big-btn.is-done{ background:var(--main-color); color:#fff; }
+  .goal-card__input-row{ display:flex; gap:8px; align-items:center; }
+  .goal-card__input{
+    flex:1;
+    min-height:44px;
+    border:1px solid var(--border-color);
+    border-radius:var(--radius-sm);
+    padding:0 10px;
+    font-size:16px;
+    min-width:0;
+  }
+  .goal-card__achieved{ margin-top:8px; color:var(--success-color); font-weight:700; }
+  .goal-card__total-info{ font-size:14px; margin-top:6px; color:var(--text-color); }
+
+  .summary-card{
+    background:var(--accent-bg);
+    border-radius:var(--radius);
+    padding:14px;
+    margin-bottom:var(--gap);
+    font-size:14px;
+  }
+  .summary-card__row{ display:flex; justify-content:space-between; margin-bottom:4px; }
+  .summary-card__row:last-child{ margin-bottom:0; }
+
+  .graph-card{
+    background:var(--card-bg);
+    border:1px solid var(--border-color);
+    border-radius:var(--radius);
+    padding:14px;
+    margin-bottom:var(--gap);
+  }
+  .graph-card__title{ font-size:16px; font-weight:700; margin-bottom:8px; }
+  .graph-card__svg{ width:100%; height:auto; display:block; }
+  .graph-card__note{ font-size:14px; margin-top:8px; font-weight:700; color:var(--main-color-dark); }
+  .graph-card__streak{ font-size:14px; margin-top:8px; }
+
+  .calendar__month-title{ font-size:13px; font-weight:700; margin:10px 0 4px; color:var(--sub-text-color); }
+  .calendar__grid{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:4px;
+    text-align:center;
+  }
+  .calendar__weekday{ font-size:11px; color:var(--sub-text-color); }
+  .calendar__day{
+    position:relative;
+    aspect-ratio:1/1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    border-radius:6px;
+    background:#f6f7f9;
+    color:var(--text-color);
+  }
+  .calendar__day--empty{ background:transparent; }
+  .calendar__day--achieved{ background:var(--accent-bg); color:var(--main-color-dark); font-weight:700; }
+  .calendar__day--partial{ background:#fff6e0; color:#9a6b00; font-weight:700; }
+  .calendar__day-mark{ position:absolute; bottom:1px; font-size:9px; }
+
+  .settings-section{ margin-bottom:24px; }
+  .settings-section__title{ font-size:16px; font-weight:700; margin-bottom:10px; }
+  .list-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    border:1px solid var(--border-color);
+    border-radius:var(--radius-sm);
+    padding:10px 12px;
+    margin-bottom:8px;
+    flex-wrap:wrap;
+  }
+  .list-row__main{ flex:1; min-width:140px; }
+  .list-row__name{ font-weight:700; font-size:15px; }
+  .list-row__sub{ font-size:12px; color:var(--sub-text-color); }
+  .list-row__actions{ display:flex; gap:6px; flex-wrap:wrap; }
+  .badge{
+    display:inline-block;
+    font-size:11px;
+    padding:2px 8px;
+    border-radius:10px;
+    background:#eee;
+    color:#555;
+    margin-left:6px;
+  }
+  .badge--active{ background:var(--main-color); color:#fff; }
+
+  .form-panel{
+    border:1px solid var(--border-color);
+    border-radius:var(--radius);
+    padding:14px;
+    margin-bottom:12px;
+    background:#fafbfc;
+  }
+  .form-group{ margin-bottom:12px; }
+  .form-group__label{ display:block; font-size:13px; font-weight:700; margin-bottom:4px; }
+  .form-field{
+    width:100%;
+    min-height:44px;
+    border:1px solid var(--border-color);
+    border-radius:var(--radius-sm);
+    padding:0 10px;
+    font-size:16px;
+    background:#fff;
+  }
+  .form-row{ display:flex; gap:8px; }
+  .form-row .form-group{ flex:1; }
+  .form-actions{ display:flex; gap:8px; margin-top:12px; }
+  .weeks-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .weeks-grid__item label{ font-size:12px; color:var(--sub-text-color); display:block; margin-bottom:2px; }
+
+  .modal-overlay{
+    position:fixed; inset:0;
+    background:rgba(0,0,0,.45);
+    display:flex; align-items:center; justify-content:center;
+    z-index:50;
+    padding:20px;
+  }
+  .modal{
+    background:#fff;
+    border-radius:var(--radius);
+    padding:20px;
+    max-width:360px;
+    width:100%;
+  }
+  .modal__text{ font-size:15px; line-height:1.6; white-space:pre-wrap; margin:0 0 16px; }
+  .modal__actions{ display:flex; gap:8px; justify-content:flex-end; }
+
+  h2{ font-size:17px; margin:0 0 10px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="app-header">
+    <h1 class="app-header__title" id="screenTitle">きょう</h1>
+  </header>
+  <main id="screen-today" class="screen"></main>
+  <main id="screen-graph" class="screen" hidden></main>
+  <main id="screen-settings" class="screen" hidden></main>
+  <nav class="tabbar">
+    <button class="tabbar__btn is-active" data-screen="today"><span class="tabbar__icon">📅</span><span>きょう</span></button>
+    <button class="tabbar__btn" data-screen="graph"><span class="tabbar__icon">📈</span><span>グラフ</span></button>
+    <button class="tabbar__btn" data-screen="settings"><span class="tabbar__icon">⚙️</span><span>せってい</span></button>
+  </nav>
+</div>
+<div id="modalRoot"></div>
+
+<script>
+"use strict";
+
+/* ===================== 定数・状態 ===================== */
+var STORAGE_KEY = "target_v1";
+var state = null;
+var ui = {
+  screen: "today",
+  todayDate: null,
+  periodForm: null, // {mode:'add'|'edit', id, name, start, end}
+  goalForm: null    // {mode:'add'|'edit', id, name, type, mode, target, unit, totalTarget, weeks:[]}
+};
+
+/* ===================== ユーティリティ ===================== */
+function esc(str){
+  return String(str).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+function genId(prefix){
+  return prefix + "_" + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+}
+function pad2(n){ return String(n).padStart(2,"0"); }
+function todayStr(){
+  var d = new Date();
+  return d.getFullYear() + "-" + pad2(d.getMonth()+1) + "-" + pad2(d.getDate());
+}
+function parseDate(dateStr){
+  var parts = dateStr.split("-").map(Number);
+  return new Date(parts[0], parts[1]-1, parts[2]);
+}
+function formatDateStr(d){
+  return d.getFullYear() + "-" + pad2(d.getMonth()+1) + "-" + pad2(d.getDate());
+}
+function addDays(dateStr, n){
+  var d = parseDate(dateStr);
+  d.setDate(d.getDate()+n);
+  return formatDateStr(d);
+}
+function dateDiffDays(a, b){
+  return Math.round((parseDate(b) - parseDate(a)) / 86400000);
+}
+function formatMD(dateStr){
+  var parts = dateStr.split("-");
+  return Number(parts[1]) + "月" + Number(parts[2]) + "日";
+}
+function clampDateToPeriod(dateStr, period){
+  if(dateStr < period.start) return period.start;
+  if(dateStr > period.end) return period.end;
+  return dateStr;
+}
+function weekNumberOf(period, dateStr){
+  return Math.floor(dateDiffDays(period.start, dateStr)/7) + 1;
+}
+function periodTotalDays(period){
+  return dateDiffDays(period.start, period.end) + 1;
+}
+function periodTotalWeeks(period){
+  return Math.ceil(periodTotalDays(period)/7);
+}
+function weeklyTargetFor(goal, weekNum){
+  var idx = Math.min(weekNum-1, goal.weeks.length-1);
+  idx = Math.max(idx, 0);
+  return goal.weeks[idx] || 0;
+}
+
+/* ===================== データ読み書き ===================== */
+function defaultState(){
+  return { version:1, activePeriodId:null, periods:[], goals:[], records:[] };
+}
+function loadState(){
+  var raw = localStorage.getItem(STORAGE_KEY);
+  if(!raw) return defaultState();
+  try{
+    var data = JSON.parse(raw);
+    if(!data || typeof data !== "object") throw new Error("invalid");
+    if(data.version === 1){
+      data.periods = data.periods || [];
+      data.goals = data.goals || [];
+      data.records = data.records || [];
+      if(!data.activePeriodId) data.activePeriodId = null;
+      return data;
+    }
+    throw new Error("unsupported version");
+  }catch(e){
+    alert("ほぞんデータをよみこめませんでした");
+    return defaultState();
+  }
+}
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+/* ===================== 状態操作ヘルパー ===================== */
+function getActivePeriod(){
+  if(!state.activePeriodId) return null;
+  return state.periods.find(function(p){ return p.id === state.activePeriodId; }) || null;
+}
+function getGoalsOfActivePeriod(){
+  var period = getActivePeriod();
+  if(!period) return [];
+  return state.goals.filter(function(g){ return g.periodId === period.id; })
+    .sort(function(a,b){ return a.order - b.order; });
+}
+function findRecord(date, goalId){
+  return state.records.find(function(r){ return r.date === date && r.goalId === goalId; });
+}
+function setRecord(date, goalId, value){
+  var existing = findRecord(date, goalId);
+  if(existing) existing.value = value;
+  else state.records.push({ date: date, goalId: goalId, value: value });
+  saveState();
+}
+function deleteRecord(date, goalId){
+  state.records = state.records.filter(function(r){ return !(r.date === date && r.goalId === goalId); });
+  saveState();
+}
+function recordsOfGoal(goalId){
+  return state.records.filter(function(r){ return r.goalId === goalId; });
+}
+
+function addPeriod(data){
+  var period = { id: genId("p"), name: data.name, start: data.start, end: data.end };
+  state.periods.push(period);
+  if(!state.activePeriodId) state.activePeriodId = period.id;
+  saveState();
+}
+function updatePeriod(periodId, patch){
+  var period = state.periods.find(function(p){ return p.id === periodId; });
+  Object.assign(period, patch);
+  saveState();
+}
+function deletePeriod(periodId){
+  var goalIds = state.goals.filter(function(g){ return g.periodId === periodId; }).map(function(g){ return g.id; });
+  state.goals = state.goals.filter(function(g){ return g.periodId !== periodId; });
+  state.records = state.records.filter(function(r){ return goalIds.indexOf(r.goalId) === -1; });
+  state.periods = state.periods.filter(function(p){ return p.id !== periodId; });
+  if(state.activePeriodId === periodId){
+    state.activePeriodId = state.periods.length ? state.periods[0].id : null;
+    var np = getActivePeriod();
+    ui.todayDate = np ? clampDateToPeriod(todayStr(), np) : todayStr();
+  }
+  saveState();
+}
+function openPeriod(periodId){
+  state.activePeriodId = periodId;
+  var p = getActivePeriod();
+  ui.todayDate = clampDateToPeriod(todayStr(), p);
+  saveState();
+}
+
+function addGoal(goalData){
+  var period = getActivePeriod();
+  var existing = state.goals.filter(function(g){ return g.periodId === period.id; });
+  var maxOrder = existing.reduce(function(m,g){ return Math.max(m, g.order); }, -1);
+  var goal = Object.assign({ id: genId("g"), periodId: period.id, order: maxOrder+1, createdAt: Date.now() }, goalData);
+  state.goals.push(goal);
+  saveState();
+}
+function updateGoal(goalId, patch){
+  var goal = state.goals.find(function(g){ return g.id === goalId; });
+  Object.assign(goal, patch);
+  saveState();
+}
+function deleteGoal(goalId){
+  state.goals = state.goals.filter(function(g){ return g.id !== goalId; });
+  state.records = state.records.filter(function(r){ return r.goalId !== goalId; });
+  saveState();
+}
+function moveGoal(goalId, direction){
+  var list = getGoalsOfActivePeriod();
+  var idx = list.findIndex(function(g){ return g.id === goalId; });
+  var swapIdx = idx + direction;
+  if(swapIdx < 0 || swapIdx >= list.length) return;
+  var tmp = list[idx].order;
+  list[idx].order = list[swapIdx].order;
+  list[swapIdx].order = tmp;
+  saveState();
+}
+
+function resetAllData(){
+  state = defaultState();
+  ui.todayDate = todayStr();
+  saveState();
+}
+
+/* ===================== 確認モーダル ===================== */
+function showConfirm(message, onConfirm, opts){
+  opts = opts || {};
+  var root = document.getElementById("modalRoot");
+  root.innerHTML =
+    '<div class="modal-overlay">' +
+      '<div class="modal">' +
+        '<p class="modal__text">' + esc(message) + '</p>' +
+        '<div class="modal__actions">' +
+          '<button class="btn btn--sub" data-modal="cancel">' + esc(opts.cancelLabel || "キャンセル") + '</button>' +
+          '<button class="btn ' + (opts.danger ? "btn--danger" : "btn--primary") + '" data-modal="ok">' + esc(opts.okLabel || "はい") + '</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  root.querySelector('[data-modal="cancel"]').onclick = function(){ root.innerHTML = ""; if(opts.onCancel) opts.onCancel(); };
+  root.querySelector('[data-modal="ok"]').onclick = function(){ root.innerHTML = ""; onConfirm(); };
+}
+
+/* ===================== 画面切り替え ===================== */
+function switchScreen(name){
+  ui.screen = name;
+  document.getElementById("screen-today").hidden = name !== "today";
+  document.getElementById("screen-graph").hidden = name !== "graph";
+  document.getElementById("screen-settings").hidden = name !== "settings";
+  document.querySelectorAll(".tabbar__btn").forEach(function(b){
+    b.classList.toggle("is-active", b.dataset.screen === name);
+  });
+  document.getElementById("screenTitle").textContent = { today:"きょう", graph:"グラフ", settings:"せってい" }[name];
+  if(name === "today") renderToday();
+  else if(name === "graph") renderGraph();
+  else renderSettings();
+}
+
+/* ===================== きょう画面 ===================== */
+function renderToday(){
+  var el = document.getElementById("screen-today");
+  var period = getActivePeriod();
+  var goals = getGoalsOfActivePeriod();
+
+  if(!period){
+    el.innerHTML = emptyStateHtml("きかんが まだ ありません。\n「せってい」タブから きかんを つくってね!");
+    return;
+  }
+  if(goals.length === 0){
+    el.innerHTML = emptyStateHtml("もくひょうが まだ ありません。\n「せってい」タブから もくひょうを ついかしてね!");
+    return;
+  }
+
+  if(!ui.todayDate) ui.todayDate = todayStr();
+  ui.todayDate = clampDateToPeriod(ui.todayDate, period);
+  var date = ui.todayDate;
+
+  var html = "";
+  html += '<div class="date-nav">';
+  html += '<button class="date-nav__btn" data-action="prev-day" ' + (date <= period.start ? "disabled" : "") + '>◀</button>';
+  html += '<div class="date-nav__label">' + esc(formatMD(date)) + '</div>';
+  html += '<button class="date-nav__btn" data-action="next-day" ' + (date >= period.end ? "disabled" : "") + '>▶</button>';
+  html += '</div>';
+
+  if(date !== todayStr()){
+    html += '<div class="today-banner">' + esc(formatMD(date)) + 'の きろくを へんしゅうちゅう</div>';
+  }
+
+  goals.forEach(function(goal){
+    html += goalCardHtml(goal, date, period);
+  });
+
+  el.innerHTML = html;
+}
+
+function emptyStateHtml(text){
+  return '<div class="empty-state">' +
+    '<div class="empty-state__text">' + esc(text) + '</div>' +
+    '<button class="btn btn--primary" data-action="goto-settings">せっていへ いく</button>' +
+    '</div>';
+}
+
+function goalCardHtml(goal, date, period){
+  var rec = findRecord(date, goal.id);
+  if(goal.type === "daily" && goal.mode === "check"){
+    var done = !!rec && rec.value === 1;
+    return '<div class="goal-card">' +
+      '<div class="goal-card__title">' + esc(goal.name) + '</div>' +
+      '<button class="goal-card__big-btn ' + (done ? "is-done" : "") + '" data-action="toggle-check" data-goal-id="' + goal.id + '">' +
+        (done ? "できた! ✅" : "できた!") +
+      '</button>' +
+    '</div>';
+  }
+  if(goal.type === "daily" && goal.mode === "number"){
+    var val = rec ? rec.value : "";
+    var achieved = !!rec && rec.value >= goal.target;
+    return '<div class="goal-card">' +
+      '<div class="goal-card__title">' + esc(goal.name) + '</div>' +
+      '<div class="goal-card__target">もくひょう: ' + goal.target + esc(goal.unit) + '</div>' +
+      '<div class="goal-card__input-row">' +
+        '<input type="number" inputmode="numeric" class="goal-card__input" data-goal-input="' + goal.id + '" value="' + val + '">' +
+        '<button class="btn btn--primary" data-action="record-number" data-goal-id="' + goal.id + '">きろく</button>' +
+      '</div>' +
+      (achieved ? '<div class="goal-card__achieved">✅ たっせい!</div>' : '') +
+    '</div>';
+  }
+  if(goal.type === "weekly"){
+    var weekNum = weekNumberOf(period, date);
+    var target = weeklyTargetFor(goal, weekNum);
+    var wval = rec ? rec.value : "";
+    var wachieved = !!rec && rec.value >= target;
+    return '<div class="goal-card">' +
+      '<div class="goal-card__title">' + esc(goal.name) + '<span class="goal-card__week">だい' + weekNum + 'しゅうめ</span></div>' +
+      '<div class="goal-card__target">もくひょう: ' + target + esc(goal.unit) + '</div>' +
+      '<div class="goal-card__input-row">' +
+        '<input type="number" inputmode="numeric" class="goal-card__input" data-goal-input="' + goal.id + '" value="' + wval + '">' +
+        '<button class="btn btn--primary" data-action="record-number" data-goal-id="' + goal.id + '">きろく</button>' +
+      '</div>' +
+      (wachieved ? '<div class="goal-card__achieved">✅ たっせい!</div>' : '') +
+    '</div>';
+  }
+  if(goal.type === "total"){
+    var sum = recordsOfGoal(goal.id).reduce(function(s,r){ return s + r.value; }, 0);
+    var tval = rec ? rec.value : "";
+    var remain = Math.max(goal.totalTarget - sum, 0);
+    return '<div class="goal-card">' +
+      '<div class="goal-card__title">' + esc(goal.name) + '</div>' +
+      '<div class="goal-card__target">きょう すすんだ ' + esc(goal.unit) + 'すう</div>' +
+      '<div class="goal-card__input-row">' +
+        '<input type="number" inputmode="numeric" class="goal-card__input" data-goal-input="' + goal.id + '" value="' + tval + '">' +
+        '<button class="btn btn--primary" data-action="record-number" data-goal-id="' + goal.id + '">きろく</button>' +
+      '</div>' +
+      '<div class="goal-card__total-info">ごうけい ' + sum + '/' + goal.totalTarget + ' ' + esc(goal.unit) + '</div>' +
+      '<div class="goal-card__total-info">のこり ' + remain + ' ' + esc(goal.unit) + '</div>' +
+    '</div>';
+  }
+  return "";
+}
+
+function goPrevDay(){
+  var period = getActivePeriod();
+  var prev = addDays(ui.todayDate, -1);
+  if(prev >= period.start){ ui.todayDate = prev; renderToday(); }
+}
+function goNextDay(){
+  var period = getActivePeriod();
+  var next = addDays(ui.todayDate, 1);
+  if(next <= period.end){ ui.todayDate = next; renderToday(); }
+}
+
+function onDailyCheckClick(goalId){
+  var goal = state.goals.find(function(g){ return g.id === goalId; });
+  var date = ui.todayDate;
+  var rec = findRecord(date, goalId);
+  if(!rec){
+    setRecord(date, goalId, 1);
+    renderToday();
+  } else {
+    showConfirm(formatMD(date) + "の『" + goal.name + "』のきろくを とりけします。いいですか?", function(){
+      deleteRecord(date, goalId);
+      renderToday();
+    });
+  }
+}
+
+function onRecordNumberClick(goalId){
+  var goal = state.goals.find(function(g){ return g.id === goalId; });
+  var input = document.querySelector('[data-goal-input="' + goalId + '"]');
+  var raw = input.value;
+  if(raw === "" || isNaN(Number(raw)) || Number(raw) < 0){
+    alert("すうじを ただしく にゅうりょくしてね");
+    return;
+  }
+  var value = Number(raw);
+  var date = ui.todayDate;
+  var existing = findRecord(date, goalId);
+  if(existing && existing.value !== value){
+    showConfirm(formatMD(date) + "の『" + goal.name + "』のきろくを " + existing.value + esc(goal.unit || "") + " → " + value + esc(goal.unit || "") + " にかえます。いいですか?", function(){
+      setRecord(date, goalId, value);
+      renderToday();
+    });
+  } else if(!existing){
+    setRecord(date, goalId, value);
+    renderToday();
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+  document.getElementById("screen-today").addEventListener("click", function(e){
+    var btn;
+    if((btn = e.target.closest('[data-action="prev-day"]'))) return goPrevDay();
+    if((btn = e.target.closest('[data-action="next-day"]'))) return goNextDay();
+    if((btn = e.target.closest('[data-action="goto-settings"]'))) return switchScreen("settings");
+    if((btn = e.target.closest('[data-action="toggle-check"]'))) return onDailyCheckClick(btn.dataset.goalId);
+    if((btn = e.target.closest('[data-action="record-number"]'))) return onRecordNumberClick(btn.dataset.goalId);
+  });
+});
+
+/* ===================== グラフ画面 ===================== */
+function renderGraph(){
+  var el = document.getElementById("screen-graph");
+  var period = getActivePeriod();
+  var goals = getGoalsOfActivePeriod();
+
+  if(!period){
+    el.innerHTML = emptyStateHtml("きかんが まだ ありません。\n「せってい」タブから きかんを つくってね!");
+    return;
+  }
+  if(goals.length === 0){
+    el.innerHTML = emptyStateHtml("もくひょうが まだ ありません。\n「せってい」タブから もくひょうを ついかしてね!");
+    return;
+  }
+
+  var html = "";
+  html += summaryCardHtml(period, goals);
+  goals.forEach(function(goal){
+    if(goal.type === "total") html += totalGraphCardHtml(goal, period);
+    else if(goal.type === "daily") html += dailyGraphCardHtml(goal, period);
+    else if(goal.type === "weekly") html += weeklyGraphCardHtml(goal, period);
+  });
+  el.innerHTML = html;
+}
+
+function summaryCardHtml(period, goals){
+  var totalDays = periodTotalDays(period);
+  var today = todayStr();
+  var elapsed;
+  if(today < period.start) elapsed = 0;
+  else if(today > period.end) elapsed = totalDays;
+  else elapsed = dateDiffDays(period.start, today) + 1;
+
+  var achievedCount = 0;
+  goals.forEach(function(goal){
+    var rec = findRecord(today, goal.id);
+    if(goal.type === "daily" && goal.mode === "check"){
+      if(rec && rec.value === 1) achievedCount++;
+    } else if(goal.type === "daily" && goal.mode === "number"){
+      if(rec && rec.value >= goal.target) achievedCount++;
+    } else if(goal.type === "weekly"){
+      var wn = weekNumberOf(period, today);
+      var t = weeklyTargetFor(goal, wn);
+      if(rec && rec.value >= t) achievedCount++;
+    } else if(goal.type === "total"){
+      if(rec) achievedCount++;
+    }
+  });
+  var rate = goals.length ? Math.round(achievedCount / goals.length * 100) : 0;
+
+  return '<div class="summary-card">' +
+    '<div class="summary-card__row"><span>きかん</span><span>' + esc(period.name) + '</span></div>' +
+    '<div class="summary-card__row"><span>けいかにっすう</span><span>' + elapsed + ' / ' + totalDays + ' にち</span></div>' +
+    '<div class="summary-card__row"><span>きょうの たっせいりつ</span><span>' + rate + '% (' + achievedCount + '/' + goals.length + ')</span></div>' +
+  '</div>';
+}
+
+function svgLine(points){
+  return points.map(function(p, i){ return (i===0?"M":"L") + p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" ");
+}
+
+function totalGraphCardHtml(goal, period){
+  var W = 300, H = 160, padL = 34, padR = 10, padT = 12, padB = 20;
+  var dates = [];
+  var d = period.start;
+  while(d <= period.end){ dates.push(d); d = addDays(d, 1); }
+  var n = dates.length;
+
+  var recMap = {};
+  recordsOfGoal(goal.id).forEach(function(r){ recMap[r.date] = r.value; });
+
+  var cum = 0;
+  var actualVals = dates.map(function(dt){
+    if(recMap.hasOwnProperty(dt)) cum += recMap[dt];
+    return cum;
+  });
+  var maxY = Math.max(goal.totalTarget, actualVals[actualVals.length-1] || 0) * 1.05 || 1;
+
+  function sx(i){ return padL + (n<=1?0:(i/(n-1)) * (W-padL-padR)); }
+  function sy(v){ return H-padB - (v/maxY) * (H-padT-padB); }
+
+  var actualPoints = actualVals.map(function(v,i){ return [sx(i), sy(v)]; });
+  var idealPoints = [[sx(0), sy(0)], [sx(n-1), sy(goal.totalTarget)]];
+
+  var today = clampDateToPeriod(todayStr(), period);
+  var todayIdx = dateDiffDays(period.start, today);
+  var actualToday = actualVals[todayIdx] || 0;
+  var idealToday = goal.totalTarget * (todayIdx / Math.max(n-1,1));
+  var note;
+  if(actualToday >= idealToday){
+    note = "よていより はやい!";
+  } else {
+    note = "あと" + Math.ceil(idealToday - actualToday) + esc(goal.unit) + "で よていどおり!";
+  }
+
+  var svg = '<svg class="graph-card__svg" viewBox="0 0 ' + W + ' ' + H + '">' +
+    '<line x1="' + padL + '" y1="' + (H-padB) + '" x2="' + (W-padR) + '" y2="' + (H-padB) + '" stroke="#ccc"/>' +
+    '<line x1="' + padL + '" y1="' + padT + '" x2="' + padL + '" y2="' + (H-padB) + '" stroke="#ccc"/>' +
+    '<text x="' + padL + '" y="10" font-size="9" fill="#999">' + goal.totalTarget + esc(goal.unit) + '</text>' +
+    '<path d="' + svgLine(idealPoints) + '" fill="none" stroke="#bbb" stroke-width="2" stroke-dasharray="4,3"/>' +
+    '<path d="' + svgLine(actualPoints) + '" fill="none" stroke="#2f6fed" stroke-width="2.5"/>' +
+    '</svg>';
+
+  return '<div class="graph-card">' +
+    '<div class="graph-card__title">' + esc(goal.name) + '</div>' +
+    svg +
+    '<div class="graph-card__note">' + note + '</div>' +
+  '</div>';
+}
+
+function computeAchievedMap(goal, period){
+  var map = {};
+  var d = period.start;
+  while(d <= period.end){
+    var rec = findRecord(d, goal.id);
+    var achieved;
+    var recorded = !!rec;
+    if(goal.mode === "check"){
+      achieved = recorded && rec.value === 1;
+    } else {
+      achieved = recorded && rec.value >= goal.target;
+    }
+    map[d] = { achieved: achieved, recorded: recorded };
+    d = addDays(d, 1);
+  }
+  return map;
+}
+function currentStreak(map, period){
+  var todayC = todayStr();
+  var end;
+  if(todayC < period.start) return 0;
+  end = todayC > period.end ? period.end : todayC;
+  var d = end;
+  if(!map[d].achieved && d === todayC) d = addDays(d, -1);
+  var streak = 0;
+  while(d >= period.start && map[d] && map[d].achieved){
+    streak++;
+    d = addDays(d, -1);
+  }
+  return streak;
+}
+function longestStreak(map, period){
+  var longest = 0, cur = 0;
+  var d = period.start;
+  while(d <= period.end){
+    if(map[d].achieved){ cur++; longest = Math.max(longest, cur); } else cur = 0;
+    d = addDays(d, 1);
+  }
+  return longest;
+}
+var WEEKDAY_LABELS = ["にち","げつ","か","すい","もく","きん","ど"];
+
+function calendarHtml(map, period){
+  var html = '<div class="calendar">';
+  var d = period.start;
+  var curMonth = null;
+  var monthOpen = false;
+  while(d <= period.end){
+    var parts = d.split("-");
+    var monthKey = parts[0] + "-" + parts[1];
+    if(monthKey !== curMonth){
+      if(monthOpen) html += '</div>';
+      curMonth = monthKey;
+      html += '<div class="calendar__month-title">' + Number(parts[1]) + 'がつ</div>';
+      html += '<div class="calendar__grid">';
+      WEEKDAY_LABELS.forEach(function(w){ html += '<div class="calendar__weekday">' + w + '</div>'; });
+      var wd = parseDate(d).getDay();
+      for(var i=0;i<wd;i++) html += '<div class="calendar__day calendar__day--empty"></div>';
+      monthOpen = true;
+    }
+    var info = map[d];
+    var cls = "calendar__day";
+    var mark = "";
+    if(info.achieved){ cls += " calendar__day--achieved"; mark = "○"; }
+    else if(info.recorded){ cls += " calendar__day--partial"; mark = "△"; }
+    html += '<div class="' + cls + '">' + Number(parts[2]) + (mark ? '<span class="calendar__day-mark">'+mark+'</span>' : '') + '</div>';
+    d = addDays(d, 1);
+  }
+  if(monthOpen) html += '</div>';
+  html += '</div>';
+  return html;
+}
+
+function dailyGraphCardHtml(goal, period){
+  var map = computeAchievedMap(goal, period);
+  var streak = currentStreak(map, period);
+  var longest = longestStreak(map, period);
+  return '<div class="graph-card">' +
+    '<div class="graph-card__title">' + esc(goal.name) + '</div>' +
+    '<div class="graph-card__streak">🔥 ' + streak + 'にち れんぞく! (さいちょう ' + longest + 'にち)</div>' +
+    calendarHtml(map, period) +
+  '</div>';
+}
+
+function weeklyGraphCardHtml(goal, period){
+  var totalWeeks = periodTotalWeeks(goal.type === "weekly" ? period : period);
+  var weeks = [];
+  for(var w=1; w<=totalWeeks; w++){
+    var target = weeklyTargetFor(goal, w);
+    var sum = 0, count = 0;
+    var d = period.start;
+    while(d <= period.end){
+      if(weekNumberOf(period, d) === w){
+        var rec = findRecord(d, goal.id);
+        if(rec){ sum += rec.value; count++; }
+      }
+      d = addDays(d, 1);
+    }
+    weeks.push({ week: w, target: target, avg: count ? sum/count : 0 });
+  }
+
+  var W = 300, H = 160, padL = 30, padR = 10, padT = 12, padB = 20;
+  var maxY = Math.max.apply(null, weeks.map(function(x){ return Math.max(x.target, x.avg); }).concat([1])) * 1.15;
+  var barW = (W-padL-padR) / weeks.length * 0.6;
+  var slot = (W-padL-padR) / weeks.length;
+  function sy(v){ return H-padB - (v/maxY)*(H-padT-padB); }
+
+  var bars = weeks.map(function(x,i){
+    var cx = padL + slot*i + slot/2;
+    var barX = cx - barW/2;
+    var barY = sy(x.avg);
+    var barH = (H-padB) - barY;
+    var tickY = sy(x.target);
+    return '<rect x="' + barX.toFixed(1) + '" y="' + barY.toFixed(1) + '" width="' + barW.toFixed(1) + '" height="' + Math.max(barH,0).toFixed(1) + '" fill="#2f6fed" rx="2"/>' +
+      '<line x1="' + (barX-2).toFixed(1) + '" y1="' + tickY.toFixed(1) + '" x2="' + (barX+barW+2).toFixed(1) + '" y2="' + tickY.toFixed(1) + '" stroke="#e5484d" stroke-width="2"/>' +
+      '<text x="' + cx.toFixed(1) + '" y="' + (H-6) + '" font-size="9" fill="#999" text-anchor="middle">' + x.week + 'W</text>';
+  }).join("");
+
+  var svg = '<svg class="graph-card__svg" viewBox="0 0 ' + W + ' ' + H + '">' +
+    '<line x1="' + padL + '" y1="' + (H-padB) + '" x2="' + (W-padR) + '" y2="' + (H-padB) + '" stroke="#ccc"/>' +
+    bars +
+    '</svg>';
+
+  var achievedMapForCalendar = {};
+  var dd = period.start;
+  while(dd <= period.end){
+    var rec = findRecord(dd, goal.id);
+    var wn = weekNumberOf(period, dd);
+    var t = weeklyTargetFor(goal, wn);
+    achievedMapForCalendar[dd] = { achieved: !!rec && rec.value >= t, recorded: !!rec };
+    dd = addDays(dd, 1);
+  }
+
+  return '<div class="graph-card">' +
+    '<div class="graph-card__title">' + esc(goal.name) + '</div>' +
+    svg +
+    calendarHtml(achievedMapForCalendar, period) +
+  '</div>';
+}
+
+/* ===================== せってい画面 ===================== */
+function renderSettings(){
+  var el = document.getElementById("screen-settings");
+  var html = "";
+  html += periodSectionHtml();
+  html += goalSectionHtml();
+  html += resetSectionHtml();
+  el.innerHTML = html;
+}
+
+function periodSectionHtml(){
+  var html = '<div class="settings-section">';
+  html += '<h2 class="settings-section__title">きかんの かんり</h2>';
+  state.periods.forEach(function(p){
+    var isActive = p.id === state.activePeriodId;
+    html += '<div class="list-row">' +
+      '<div class="list-row__main">' +
+        '<div class="list-row__name">' + esc(p.name) + (isActive ? '<span class="badge badge--active">つかいちゅう</span>' : '') + '</div>' +
+        '<div class="list-row__sub">' + esc(p.start) + ' 〜 ' + esc(p.end) + '</div>' +
+      '</div>' +
+      '<div class="list-row__actions">' +
+        (isActive ? '' : '<button class="btn btn--sub btn--small" data-action="open-period" data-id="' + p.id + '">ひらく</button>') +
+        '<button class="btn btn--sub btn--small" data-action="edit-period" data-id="' + p.id + '">へんしゅう</button>' +
+        '<button class="btn btn--danger btn--small" data-action="delete-period" data-id="' + p.id + '">さくじょ</button>' +
+      '</div>' +
+    '</div>';
+  });
+
+  if(ui.periodForm){
+    html += periodFormHtml(ui.periodForm);
+  } else {
+    html += '<button class="btn btn--primary btn--block" data-action="add-period-open">＋ きかんを ついかする</button>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function periodFormHtml(f){
+  return '<div class="form-panel">' +
+    '<div class="form-group">' +
+      '<label class="form-group__label">なまえ</label>' +
+      '<input type="text" class="form-field" id="pf-name" value="' + esc(f.name || "") + '" placeholder="れい: 2026年 なつやすみ">' +
+    '</div>' +
+    '<div class="form-row">' +
+      '<div class="form-group">' +
+        '<label class="form-group__label">はじまり</label>' +
+        '<input type="date" class="form-field" id="pf-start" value="' + esc(f.start || "") + '">' +
+      '</div>' +
+      '<div class="form-group">' +
+        '<label class="form-group__label">おわり</label>' +
+        '<input type="date" class="form-field" id="pf-end" value="' + esc(f.end || "") + '">' +
+      '</div>' +
+    '</div>' +
+    '<div class="form-actions">' +
+      '<button class="btn btn--sub" data-action="period-form-cancel">キャンセル</button>' +
+      '<button class="btn btn--primary" data-action="period-form-save">ほぞん</button>' +
+    '</div>' +
+  '</div>';
+}
+
+function goalSectionHtml(){
+  var period = getActivePeriod();
+  var html = '<div class="settings-section">';
+  html += '<h2 class="settings-section__title">もくひょうの かんり</h2>';
+  if(!period){
+    html += '<div class="empty-state__text" style="margin:0 0 10px;">さきに きかんを つくってね</div>';
+    html += '</div>';
+    return html;
+  }
+  var goals = getGoalsOfActivePeriod();
+  var typeLabel = { daily:"まいにち", weekly:"しゅうごと", total:"ごうけい" };
+  goals.forEach(function(g, i){
+    var sub = "";
+    if(g.type === "daily") sub = g.mode === "check" ? "○×しき" : ("もくひょう " + g.target + esc(g.unit));
+    else if(g.type === "weekly") sub = "しゅうべつ もくひょう (" + esc(g.unit) + ")";
+    else if(g.type === "total") sub = "ごうけい " + g.totalTarget + esc(g.unit);
+    html += '<div class="list-row">' +
+      '<div class="list-row__main">' +
+        '<div class="list-row__name">' + esc(g.name) + '<span class="badge">' + typeLabel[g.type] + '</span></div>' +
+        '<div class="list-row__sub">' + sub + '</div>' +
+      '</div>' +
+      '<div class="list-row__actions">' +
+        '<button class="btn btn--sub btn--small" data-action="goal-move-up" data-id="' + g.id + '" ' + (i===0?"disabled":"") + '>↑</button>' +
+        '<button class="btn btn--sub btn--small" data-action="goal-move-down" data-id="' + g.id + '" ' + (i===goals.length-1?"disabled":"") + '>↓</button>' +
+        '<button class="btn btn--sub btn--small" data-action="edit-goal" data-id="' + g.id + '">へんしゅう</button>' +
+        '<button class="btn btn--danger btn--small" data-action="delete-goal" data-id="' + g.id + '">さくじょ</button>' +
+      '</div>' +
+    '</div>';
+  });
+
+  if(ui.goalForm){
+    html += goalFormHtml(ui.goalForm, period);
+  } else {
+    html += '<button class="btn btn--primary btn--block" data-action="add-goal-open">＋ もくひょうを ついかする</button>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function goalFormHtml(f, period){
+  var html = '<div class="form-panel">';
+  html += '<div class="form-group"><label class="form-group__label">なまえ</label>' +
+    '<input type="text" class="form-field" id="gf-name" value="' + esc(f.name || "") + '" placeholder="れい: なわとび"></div>';
+  html += '<div class="form-group"><label class="form-group__label">タイプ</label>' +
+    '<select class="form-field" id="gf-type">' +
+      '<option value="daily" ' + (f.type==="daily"?"selected":"") + '>まいにち (daily)</option>' +
+      '<option value="weekly" ' + (f.type==="weekly"?"selected":"") + '>しゅうごと (weekly)</option>' +
+      '<option value="total" ' + (f.type==="total"?"selected":"") + '>ごうけい (total)</option>' +
+    '</select></div>';
+
+  if(f.type === "daily"){
+    html += '<div class="form-group"><label class="form-group__label">きろく方式</label>' +
+      '<select class="form-field" id="gf-mode">' +
+        '<option value="check" ' + (f.mode==="check"?"selected":"") + '>○×しき</option>' +
+        '<option value="number" ' + (f.mode==="number"?"selected":"") + '>すうじしき</option>' +
+      '</select></div>';
+    if(f.mode === "number"){
+      html += '<div class="form-row">' +
+        '<div class="form-group"><label class="form-group__label">1にちの もくひょう</label>' +
+          '<input type="number" inputmode="numeric" class="form-field" id="gf-target" value="' + (f.target!=null?f.target:"") + '"></div>' +
+        '<div class="form-group"><label class="form-group__label">たんい</label>' +
+          '<input type="text" class="form-field" id="gf-unit" value="' + esc(f.unit || "") + '" placeholder="れい: かい"></div>' +
+      '</div>';
+    }
+  } else if(f.type === "weekly"){
+    html += '<div class="form-group"><label class="form-group__label">たんい</label>' +
+      '<input type="text" class="form-field" id="gf-unit" value="' + esc(f.unit || "") + '" placeholder="れい: かい"></div>';
+    var totalWeeks = period ? periodTotalWeeks(period) : 1;
+    var weeks = f.weeks && f.weeks.length ? f.weeks.slice() : [];
+    while(weeks.length < totalWeeks) weeks.push(weeks.length ? weeks[weeks.length-1] : 0);
+    html += '<div class="form-group"><label class="form-group__label">しゅうごとの もくひょう(1にちあたり)</label>' +
+      '<div class="weeks-grid">';
+    for(var i=0;i<totalWeeks;i++){
+      html += '<div class="weeks-grid__item"><label>だい' + (i+1) + 'しゅう</label>' +
+        '<input type="number" inputmode="numeric" class="form-field gf-week" data-week-idx="' + i + '" value="' + weeks[i] + '"></div>';
+    }
+    html += '</div></div>';
+  } else if(f.type === "total"){
+    html += '<div class="form-row">' +
+      '<div class="form-group"><label class="form-group__label">きかんちゅうの ごうけいもくひょう</label>' +
+        '<input type="number" inputmode="numeric" class="form-field" id="gf-total-target" value="' + (f.totalTarget!=null?f.totalTarget:"") + '"></div>' +
+      '<div class="form-group"><label class="form-group__label">たんい</label>' +
+        '<input type="text" class="form-field" id="gf-unit" value="' + esc(f.unit || "") + '" placeholder="れい: ページ"></div>' +
+    '</div>';
+  }
+
+  html += '<div class="form-actions">' +
+    '<button class="btn btn--sub" data-action="goal-form-cancel">キャンセル</button>' +
+    '<button class="btn btn--primary" data-action="goal-form-save">ほぞん</button>' +
+  '</div>';
+  html += '</div>';
+  return html;
+}
+
+function resetSectionHtml(){
+  return '<div class="settings-section">' +
+    '<h2 class="settings-section__title">きろくを リセット</h2>' +
+    '<button class="btn btn--danger btn--block" data-action="reset-all">ぜんぶの きろくを けす</button>' +
+  '</div>';
+}
+
+/* ---- 設定画面イベント ---- */
+function readGoalFormFromDom(){
+  var f = ui.goalForm;
+  var name = document.getElementById("gf-name").value.trim();
+  var type = document.getElementById("gf-type").value;
+  var data = { name: name, type: type };
+  if(type === "daily"){
+    var mode = document.getElementById("gf-mode").value;
+    data.mode = mode;
+    if(mode === "number"){
+      data.target = Number(document.getElementById("gf-target").value);
+      data.unit = document.getElementById("gf-unit").value.trim();
+    }
+  } else if(type === "weekly"){
+    data.unit = document.getElementById("gf-unit").value.trim();
+    var weekInputs = document.querySelectorAll(".gf-week");
+    data.weeks = Array.prototype.map.call(weekInputs, function(inp){ return Number(inp.value) || 0; });
+  } else if(type === "total"){
+    data.totalTarget = Number(document.getElementById("gf-total-target").value);
+    data.unit = document.getElementById("gf-unit").value.trim();
+  }
+  return data;
+}
+function validateGoalData(data){
+  if(!data.name){ alert("なまえを にゅうりょくしてね"); return false; }
+  if(data.type === "daily" && data.mode === "number"){
+    if(!data.unit){ alert("たんいを にゅうりょくしてね"); return false; }
+    if(!(data.target > 0)){ alert("もくひょうの すうじを ただしく にゅうりょくしてね"); return false; }
+  }
+  if(data.type === "weekly"){
+    if(!data.unit){ alert("たんいを にゅうりょくしてね"); return false; }
+  }
+  if(data.type === "total"){
+    if(!data.unit){ alert("たんいを にゅうりょくしてね"); return false; }
+    if(!(data.totalTarget > 0)){ alert("もくひょうの すうじを ただしく にゅうりょくしてね"); return false; }
+  }
+  return true;
+}
+
+function syncGoalFormFromDomPartial(){
+  var f = ui.goalForm;
+  var nameEl = document.getElementById("gf-name");
+  if(nameEl) f.name = nameEl.value;
+  var unitEl = document.getElementById("gf-unit");
+  if(unitEl) f.unit = unitEl.value;
+  var targetEl = document.getElementById("gf-target");
+  if(targetEl) f.target = Number(targetEl.value) || 0;
+  var totalTargetEl = document.getElementById("gf-total-target");
+  if(totalTargetEl) f.totalTarget = Number(totalTargetEl.value) || 0;
+  var weekInputs = document.querySelectorAll(".gf-week");
+  if(weekInputs.length) f.weeks = Array.prototype.map.call(weekInputs, function(inp){ return Number(inp.value) || 0; });
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+  var settingsEl = document.getElementById("screen-settings");
+
+  settingsEl.addEventListener("change", function(e){
+    if(e.target.id === "gf-type"){
+      syncGoalFormFromDomPartial();
+      var type = e.target.value;
+      ui.goalForm.type = type;
+      if(type === "daily" && !ui.goalForm.mode) ui.goalForm.mode = "check";
+      renderSettings();
+    } else if(e.target.id === "gf-mode"){
+      syncGoalFormFromDomPartial();
+      ui.goalForm.mode = e.target.value;
+      renderSettings();
+    }
+  });
+
+  settingsEl.addEventListener("click", function(e){
+    var btn;
+
+    if((btn = e.target.closest('[data-action="add-period-open"]'))){
+      ui.periodForm = { mode:"add", name:"", start:"", end:"" };
+      return renderSettings();
+    }
+    if((btn = e.target.closest('[data-action="edit-period"]'))){
+      var p = state.periods.find(function(x){ return x.id === btn.dataset.id; });
+      ui.periodForm = { mode:"edit", id:p.id, name:p.name, start:p.start, end:p.end };
+      return renderSettings();
+    }
+    if((btn = e.target.closest('[data-action="period-form-cancel"]'))){
+      ui.periodForm = null;
+      return renderSettings();
+    }
+    if((btn = e.target.closest('[data-action="period-form-save"]'))){
+      var name = document.getElementById("pf-name").value.trim();
+      var start = document.getElementById("pf-start").value;
+      var end = document.getElementById("pf-end").value;
+      if(!name || !start || !end){ alert("にゅうりょくないようを かくにんしてね"); return; }
+      if(start > end){ alert("はじまりは おわりより まえの ひづけにしてね"); return; }
+      var f = ui.periodForm;
+      if(f.mode === "add"){
+        addPeriod({ name:name, start:start, end:end });
+        ui.periodForm = null;
+        renderSettings();
+      } else {
+        showConfirm("きかん『" + name + "』の せっていを かえます。いいですか?", function(){
+          updatePeriod(f.id, { name:name, start:start, end:end });
+          ui.periodForm = null;
+          renderSettings();
+        });
+      }
+      return;
+    }
+    if((btn = e.target.closest('[data-action="open-period"]'))){
+      openPeriod(btn.dataset.id);
+      return renderSettings();
+    }
+    if((btn = e.target.closest('[data-action="delete-period"]'))){
+      var p2 = state.periods.find(function(x){ return x.id === btn.dataset.id; });
+      showConfirm("きかん『" + p2.name + "』を けします。もくひょうと きろくも ぜんぶ きえます。いいですか?", function(){
+        deletePeriod(p2.id);
+        renderSettings();
+      }, { danger:true });
+      return;
+    }
+
+    if((btn = e.target.closest('[data-action="add-goal-open"]'))){
+      ui.goalForm = { formMode:"add", name:"", type:"daily", mode:"check", unit:"", weeks:[] };
+      return renderSettings();
+    }
+    if((btn = e.target.closest('[data-action="edit-goal"]'))){
+      var g = state.goals.find(function(x){ return x.id === btn.dataset.id; });
+      ui.goalForm = Object.assign({}, g, { formMode:"edit" });
+      return renderSettings();
+    }
+    if((btn = e.target.closest('[data-action="goal-form-cancel"]'))){
+      ui.goalForm = null;
+      return renderSettings();
+    }
+    if((btn = e.target.closest('[data-action="goal-form-save"]'))){
+      var data = readGoalFormFromDom();
+      if(!validateGoalData(data)) return;
+      if(ui.goalForm.formMode === "edit"){
+        var goalId = ui.goalForm.id;
+        var existingGoal = state.goals.find(function(x){ return x.id === goalId; });
+        showConfirm("もくひょう『" + data.name + "』の せっていを かえます。いいですか?", function(){
+          updateGoal(goalId, data);
+          ui.goalForm = null;
+          renderSettings();
+        });
+      } else {
+        addGoal(data);
+        ui.goalForm = null;
+        renderSettings();
+      }
+      return;
+    }
+    if((btn = e.target.closest('[data-action="goal-move-up"]'))){
+      moveGoal(btn.dataset.id, -1);
+      return renderSettings();
+    }
+    if((btn = e.target.closest('[data-action="goal-move-down"]'))){
+      moveGoal(btn.dataset.id, 1);
+      return renderSettings();
+    }
+    if((btn = e.target.closest('[data-action="delete-goal"]'))){
+      var g2 = state.goals.find(function(x){ return x.id === btn.dataset.id; });
+      showConfirm("もくひょう『" + g2.name + "』を けします。きろくも きえます。いいですか?", function(){
+        deleteGoal(g2.id);
+        renderSettings();
+      }, { danger:true });
+      return;
+    }
+    if((btn = e.target.closest('[data-action="reset-all"]'))){
+      showConfirm("ぜんぶの きろくを けします。いいですか?", function(){
+        showConfirm("ほんとうに けしますか? もとに もどせません", function(){
+          resetAllData();
+          switchScreen("today");
+        }, { danger:true, okLabel:"けす" });
+      }, { danger:true });
+      return;
+    }
+  });
+});
+
+/* ===================== タブ切り替え・初期化 ===================== */
+document.addEventListener("DOMContentLoaded", function(){
+  document.querySelectorAll(".tabbar__btn").forEach(function(b){
+    b.addEventListener("click", function(){ switchScreen(b.dataset.screen); });
+  });
+});
+
+function init(){
+  state = loadState();
+  ui.todayDate = todayStr();
+  switchScreen("today");
+}
+document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
