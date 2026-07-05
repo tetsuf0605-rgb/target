@@ -180,8 +180,7 @@
     padding:14px;
     margin-bottom:var(--gap);
   }
-  .goal-card__header{ display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:6px; }
-  .goal-card__title{ font-size:16px; font-weight:700; margin-bottom:0; }
+  .goal-card__title{ font-size:16px; font-weight:700; margin-bottom:6px; }
   .goal-card__week{ font-size:12px; font-weight:400; color:var(--color-text-sub); margin-left:6px; }
   .goal-card__target{ font-size:13px; color:var(--color-text-sub); margin-bottom:8px; }
   .goal-card__big-btn{
@@ -207,20 +206,6 @@
   }
   .goal-card__achieved{ margin-top:8px; color:var(--color-success); font-weight:700; }
   .goal-card__total-info{ font-size:14px; margin-top:6px; color:var(--color-text); }
-  .goal-card__edit-btn{
-    flex-shrink:0;
-    width:32px;
-    height:32px;
-    border-radius:50%;
-    border:1px solid var(--color-border);
-    background:var(--color-bg);
-    font-size:14px;
-    padding:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height:0;
-  }
 
   .summary-card{
     background:var(--color-accent);
@@ -239,8 +224,7 @@
     padding:14px;
     margin-bottom:var(--gap);
   }
-  .graph-card__header{ display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:8px; }
-  .graph-card__title{ font-size:16px; font-weight:700; margin-bottom:0; }
+  .graph-card__title{ font-size:16px; font-weight:700; margin-bottom:8px; }
   .graph-card__svg{ width:100%; height:auto; display:block; }
   .graph-card__note{ font-size:14px; margin-top:8px; font-weight:700; color:var(--color-main-dark); }
   .graph-card__streak{ font-size:14px; margin-top:8px; }
@@ -801,10 +785,7 @@ function emptyStateHtml(text){
 }
 
 function goalCardHeaderHtml(goal, extra){
-  return '<div class="goal-card__header">' +
-    '<div class="goal-card__title">' + esc(goal.name) + (extra || "") + '</div>' +
-    '<button class="goal-card__edit-btn" data-action="edit-goal" data-id="' + goal.id + '" aria-label="目標を編集">✏️</button>' +
-  '</div>';
+  return '<div class="goal-card__title">' + esc(goal.name) + (extra || "") + '</div>';
 }
 
 function goalCardHtml(goal, date, period){
@@ -920,7 +901,6 @@ document.addEventListener("DOMContentLoaded", function(){
     if((btn = e.target.closest('[data-action="goto-settings"]'))) return switchScreen("settings");
     if((btn = e.target.closest('[data-action="toggle-check"]'))) return onDailyCheckClick(btn.dataset.goalId);
     if((btn = e.target.closest('[data-action="record-number"]'))) return onRecordNumberClick(btn.dataset.goalId);
-    if((btn = e.target.closest('[data-action="edit-goal"]'))) return openGoalModal("edit", state.goals.find(function(g){ return g.id === btn.dataset.id; }));
   });
 });
 
@@ -986,10 +966,7 @@ function svgLine(points){
 }
 
 function graphCardHeaderHtml(goal){
-  return '<div class="graph-card__header">' +
-    '<div class="graph-card__title">' + esc(goal.name) + '</div>' +
-    '<button class="goal-card__edit-btn" data-action="edit-goal" data-id="' + goal.id + '" aria-label="目標を編集">✏️</button>' +
-  '</div>';
+  return '<div class="graph-card__title">' + esc(goal.name) + '</div>';
 }
 
 function totalGraphCardHtml(goal, period){
@@ -1180,13 +1157,6 @@ function weeklyGraphCardHtml(goal, period){
     calendarHtml(achievedMapForCalendar, period) +
   '</div>';
 }
-
-document.addEventListener("DOMContentLoaded", function(){
-  document.getElementById("screen-graph").addEventListener("click", function(e){
-    var btn = e.target.closest('[data-action="edit-goal"]');
-    if(btn) return openGoalModal("edit", state.goals.find(function(g){ return g.id === btn.dataset.id; }));
-  });
-});
 
 /* ===================== 設定画面 ===================== */
 function renderSettings(){
