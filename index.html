@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>target - なつやすみ もくひょう</title>
+<title>target - 夏休みの目標</title>
 <link rel="icon" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="manifest" href="manifest.webmanifest">
@@ -13,20 +13,45 @@
 <meta name="apple-mobile-web-app-title" content="target">
 <style>
   :root{
-    --main-color:#2f6fed;
-    --main-color-dark:#1d4fbf;
-    --accent-bg:#eaf1ff;
-    --danger-color:#e5484d;
-    --danger-bg:#fdecec;
-    --success-color:#2f9e44;
-    --text-color:#222831;
-    --sub-text-color:#6b7280;
-    --bg-color:#ffffff;
-    --card-bg:#ffffff;
-    --border-color:#e2e5ea;
+    /* colors: brand */
+    --color-main:#2f6fed;
+    --color-main-dark:#1d4fbf;
+    --color-on-main:#ffffff;
+    --color-accent:#eaf1ff;
+
+    /* colors: semantic status */
+    --color-danger:#e5484d;
+    --color-danger-bg:#fdecec;
+    --color-success:#2f9e44;
+
+    /* colors: text & surface */
+    --color-text:#222831;
+    --color-text-sub:#6b7280;
+    --color-bg:#ffffff;
+    --color-card-bg:#ffffff;
+    --color-border:#e2e5ea;
+    --color-panel-bg:#fafbfc;
+    --color-btn-sub-bg:#f0f1f3;
+    --color-calendar-bg:#f6f7f9;
+    --color-badge-bg:#eee;
+    --color-badge-text:#555;
+    --color-partial-bg:#fff6e0;
+    --color-partial-text:#9a6b00;
+    --color-axis:#ccc;
+    --color-axis-text:#999;
+    --color-ideal-line:#bbb;
+    --color-overlay:rgba(0,0,0,.45);
+
+    /* typography */
+    --font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+
+    /* shape */
     --radius:14px;
     --radius-sm:8px;
-    --font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+    --radius-xs:6px;
+    --radius-pill:10px;
+
+    /* layout */
     --tabbar-height:64px;
     --header-height:52px;
     --gap:12px;
@@ -35,8 +60,8 @@
   html,body{ margin:0; padding:0; }
   body{
     font-family:var(--font-family);
-    color:var(--text-color);
-    background:var(--bg-color);
+    color:var(--color-text);
+    background:var(--color-bg);
     -webkit-tap-highlight-color:transparent;
   }
   button,input,select{ font-family:inherit; }
@@ -46,17 +71,17 @@
     min-height:100dvh;
     display:flex;
     flex-direction:column;
-    background:var(--bg-color);
+    background:var(--color-bg);
   }
   .app-header{
     height:var(--header-height);
     display:flex;
     align-items:center;
     justify-content:center;
-    border-bottom:1px solid var(--border-color);
+    border-bottom:1px solid var(--color-border);
     position:sticky;
     top:0;
-    background:var(--bg-color);
+    background:var(--color-bg);
     z-index:5;
   }
   .app-header__title{
@@ -74,8 +99,8 @@
     bottom:0;
     height:var(--tabbar-height);
     display:flex;
-    border-top:1px solid var(--border-color);
-    background:var(--bg-color);
+    border-top:1px solid var(--color-border);
+    background:var(--color-bg);
     z-index:5;
   }
   .tabbar__btn{
@@ -88,16 +113,16 @@
     justify-content:center;
     gap:2px;
     font-size:12px;
-    color:var(--sub-text-color);
+    color:var(--color-text-sub);
     padding:4px;
   }
-  .tabbar__btn.is-active{ color:var(--main-color); font-weight:700; }
+  .tabbar__btn.is-active{ color:var(--color-main); font-weight:700; }
   .tabbar__icon{ font-size:22px; line-height:1; }
 
   .empty-state{
     margin-top:40px;
     text-align:center;
-    color:var(--sub-text-color);
+    color:var(--color-text-sub);
   }
   .empty-state__text{ font-size:16px; line-height:1.7; margin-bottom:16px; white-space:pre-wrap; }
 
@@ -113,17 +138,17 @@
     font-weight:700;
     cursor:pointer;
   }
-  .btn--primary{ background:var(--main-color); color:#fff; }
-  .btn--primary:active{ background:var(--main-color-dark); }
-  .btn--sub{ background:#f0f1f3; color:var(--text-color); }
-  .btn--danger{ background:var(--danger-color); color:#fff; }
+  .btn--primary{ background:var(--color-main); color:var(--color-on-main); }
+  .btn--primary:active{ background:var(--color-main-dark); }
+  .btn--sub{ background:var(--color-btn-sub-bg); color:var(--color-text); }
+  .btn--danger{ background:var(--color-danger); color:var(--color-on-main); }
   .btn--block{ width:100%; }
   .btn--small{ min-height:36px; padding:6px 12px; font-size:13px; }
   .btn:disabled{ opacity:.4; }
 
   .today-banner{
-    background:var(--accent-bg);
-    color:var(--main-color-dark);
+    background:var(--color-accent);
+    color:var(--color-main-dark);
     border-radius:var(--radius-sm);
     padding:10px 14px;
     font-weight:700;
@@ -142,48 +167,63 @@
     width:44px;
     height:44px;
     border-radius:50%;
-    border:1px solid var(--border-color);
-    background:#fff;
+    border:1px solid var(--color-border);
+    background:var(--color-bg);
     font-size:18px;
   }
   .date-nav__label{ font-size:18px; font-weight:700; min-width:140px; text-align:center; }
 
   .goal-card{
-    background:var(--card-bg);
-    border:1px solid var(--border-color);
+    background:var(--color-card-bg);
+    border:1px solid var(--color-border);
     border-radius:var(--radius);
     padding:14px;
     margin-bottom:var(--gap);
   }
-  .goal-card__title{ font-size:16px; font-weight:700; margin-bottom:6px; }
-  .goal-card__week{ font-size:12px; font-weight:400; color:var(--sub-text-color); margin-left:6px; }
-  .goal-card__target{ font-size:13px; color:var(--sub-text-color); margin-bottom:8px; }
+  .goal-card__header{ display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:6px; }
+  .goal-card__title{ font-size:16px; font-weight:700; margin-bottom:0; }
+  .goal-card__week{ font-size:12px; font-weight:400; color:var(--color-text-sub); margin-left:6px; }
+  .goal-card__target{ font-size:13px; color:var(--color-text-sub); margin-bottom:8px; }
   .goal-card__big-btn{
     width:100%;
     min-height:64px;
     border-radius:var(--radius-sm);
-    border:2px solid var(--main-color);
-    background:#fff;
-    color:var(--main-color);
+    border:2px solid var(--color-main);
+    background:var(--color-bg);
+    color:var(--color-main);
     font-size:20px;
     font-weight:700;
   }
-  .goal-card__big-btn.is-done{ background:var(--main-color); color:#fff; }
+  .goal-card__big-btn.is-done{ background:var(--color-main); color:var(--color-on-main); }
   .goal-card__input-row{ display:flex; gap:8px; align-items:center; }
   .goal-card__input{
     flex:1;
     min-height:44px;
-    border:1px solid var(--border-color);
+    border:1px solid var(--color-border);
     border-radius:var(--radius-sm);
     padding:0 10px;
     font-size:16px;
     min-width:0;
   }
-  .goal-card__achieved{ margin-top:8px; color:var(--success-color); font-weight:700; }
-  .goal-card__total-info{ font-size:14px; margin-top:6px; color:var(--text-color); }
+  .goal-card__achieved{ margin-top:8px; color:var(--color-success); font-weight:700; }
+  .goal-card__total-info{ font-size:14px; margin-top:6px; color:var(--color-text); }
+  .goal-card__edit-btn{
+    flex-shrink:0;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    border:1px solid var(--color-border);
+    background:var(--color-bg);
+    font-size:14px;
+    padding:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:0;
+  }
 
   .summary-card{
-    background:var(--accent-bg);
+    background:var(--color-accent);
     border-radius:var(--radius);
     padding:14px;
     margin-bottom:var(--gap);
@@ -193,25 +233,26 @@
   .summary-card__row:last-child{ margin-bottom:0; }
 
   .graph-card{
-    background:var(--card-bg);
-    border:1px solid var(--border-color);
+    background:var(--color-card-bg);
+    border:1px solid var(--color-border);
     border-radius:var(--radius);
     padding:14px;
     margin-bottom:var(--gap);
   }
-  .graph-card__title{ font-size:16px; font-weight:700; margin-bottom:8px; }
+  .graph-card__header{ display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:8px; }
+  .graph-card__title{ font-size:16px; font-weight:700; margin-bottom:0; }
   .graph-card__svg{ width:100%; height:auto; display:block; }
-  .graph-card__note{ font-size:14px; margin-top:8px; font-weight:700; color:var(--main-color-dark); }
+  .graph-card__note{ font-size:14px; margin-top:8px; font-weight:700; color:var(--color-main-dark); }
   .graph-card__streak{ font-size:14px; margin-top:8px; }
 
-  .calendar__month-title{ font-size:13px; font-weight:700; margin:10px 0 4px; color:var(--sub-text-color); }
+  .calendar__month-title{ font-size:13px; font-weight:700; margin:10px 0 4px; color:var(--color-text-sub); }
   .calendar__grid{
     display:grid;
     grid-template-columns:repeat(7,1fr);
     gap:4px;
     text-align:center;
   }
-  .calendar__weekday{ font-size:11px; color:var(--sub-text-color); }
+  .calendar__weekday{ font-size:11px; color:var(--color-text-sub); }
   .calendar__day{
     position:relative;
     aspect-ratio:1/1;
@@ -219,13 +260,13 @@
     align-items:center;
     justify-content:center;
     font-size:11px;
-    border-radius:6px;
-    background:#f6f7f9;
-    color:var(--text-color);
+    border-radius:var(--radius-xs);
+    background:var(--color-calendar-bg);
+    color:var(--color-text);
   }
   .calendar__day--empty{ background:transparent; }
-  .calendar__day--achieved{ background:var(--accent-bg); color:var(--main-color-dark); font-weight:700; }
-  .calendar__day--partial{ background:#fff6e0; color:#9a6b00; font-weight:700; }
+  .calendar__day--achieved{ background:var(--color-accent); color:var(--color-main-dark); font-weight:700; }
+  .calendar__day--partial{ background:var(--color-partial-bg); color:var(--color-partial-text); font-weight:700; }
   .calendar__day-mark{ position:absolute; bottom:1px; font-size:9px; }
 
   .settings-section{ margin-bottom:24px; }
@@ -235,7 +276,7 @@
     align-items:center;
     justify-content:space-between;
     gap:8px;
-    border:1px solid var(--border-color);
+    border:1px solid var(--color-border);
     border-radius:var(--radius-sm);
     padding:10px 12px;
     margin-bottom:8px;
@@ -243,59 +284,62 @@
   }
   .list-row__main{ flex:1; min-width:140px; }
   .list-row__name{ font-weight:700; font-size:15px; }
-  .list-row__sub{ font-size:12px; color:var(--sub-text-color); }
+  .list-row__sub{ font-size:12px; color:var(--color-text-sub); }
   .list-row__actions{ display:flex; gap:6px; flex-wrap:wrap; }
   .badge{
     display:inline-block;
     font-size:11px;
     padding:2px 8px;
-    border-radius:10px;
-    background:#eee;
-    color:#555;
+    border-radius:var(--radius-pill);
+    background:var(--color-badge-bg);
+    color:var(--color-badge-text);
     margin-left:6px;
   }
-  .badge--active{ background:var(--main-color); color:#fff; }
+  .badge--active{ background:var(--color-main); color:var(--color-on-main); }
 
   .form-panel{
-    border:1px solid var(--border-color);
+    border:1px solid var(--color-border);
     border-radius:var(--radius);
     padding:14px;
     margin-bottom:12px;
-    background:#fafbfc;
+    background:var(--color-panel-bg);
   }
   .form-group{ margin-bottom:12px; }
   .form-group__label{ display:block; font-size:13px; font-weight:700; margin-bottom:4px; }
   .form-field{
     width:100%;
     min-height:44px;
-    border:1px solid var(--border-color);
+    border:1px solid var(--color-border);
     border-radius:var(--radius-sm);
     padding:0 10px;
     font-size:16px;
-    background:#fff;
+    background:var(--color-bg);
   }
   .form-row{ display:flex; gap:8px; }
   .form-row .form-group{ flex:1; }
   .form-actions{ display:flex; gap:8px; margin-top:12px; }
   .weeks-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-  .weeks-grid__item label{ font-size:12px; color:var(--sub-text-color); display:block; margin-bottom:2px; }
+  .weeks-grid__item label{ font-size:12px; color:var(--color-text-sub); display:block; margin-bottom:2px; }
 
   .modal-overlay{
     position:fixed; inset:0;
-    background:rgba(0,0,0,.45);
+    background:var(--color-overlay);
     display:flex; align-items:center; justify-content:center;
     z-index:50;
     padding:20px;
   }
   .modal{
-    background:#fff;
+    background:var(--color-bg);
     border-radius:var(--radius);
     padding:20px;
     max-width:360px;
     width:100%;
   }
+  .modal--form{ max-width:420px; max-height:85vh; overflow-y:auto; text-align:left; }
   .modal__text{ font-size:15px; line-height:1.6; white-space:pre-wrap; margin:0 0 16px; }
   .modal__actions{ display:flex; gap:8px; justify-content:flex-end; }
+
+  #confirmRoot .modal-overlay{ z-index:60; }
 
   h2{ font-size:17px; margin:0 0 10px; }
 </style>
@@ -303,18 +347,19 @@
 <body>
 <div id="app">
   <header class="app-header">
-    <h1 class="app-header__title" id="screenTitle">きょう</h1>
+    <h1 class="app-header__title" id="screenTitle">今日</h1>
   </header>
   <main id="screen-today" class="screen"></main>
   <main id="screen-graph" class="screen" hidden></main>
   <main id="screen-settings" class="screen" hidden></main>
   <nav class="tabbar">
-    <button class="tabbar__btn is-active" data-screen="today"><span class="tabbar__icon">📅</span><span>きょう</span></button>
+    <button class="tabbar__btn is-active" data-screen="today"><span class="tabbar__icon">📅</span><span>今日</span></button>
     <button class="tabbar__btn" data-screen="graph"><span class="tabbar__icon">📈</span><span>グラフ</span></button>
-    <button class="tabbar__btn" data-screen="settings"><span class="tabbar__icon">⚙️</span><span>せってい</span></button>
+    <button class="tabbar__btn" data-screen="settings"><span class="tabbar__icon">⚙️</span><span>設定</span></button>
   </nav>
 </div>
 <div id="modalRoot"></div>
+<div id="confirmRoot"></div>
 
 <script>
 "use strict";
@@ -326,7 +371,7 @@ var ui = {
   screen: "today",
   todayDate: null,
   periodForm: null, // {mode:'add'|'edit', id, name, start, end}
-  goalForm: null    // {mode:'add'|'edit', id, name, type, mode, target, unit, totalTarget, weeks:[]}
+  goalForm: null    // {formMode:'add'|'edit', id, name, type, mode, target, unit, totalTarget, weeks:[]}
 };
 
 /* ===================== ユーティリティ ===================== */
@@ -401,7 +446,7 @@ function loadState(){
     }
     throw new Error("unsupported version");
   }catch(e){
-    alert("ほぞんデータをよみこめませんでした");
+    alert("保存データを読み込めませんでした");
     return defaultState();
   }
 }
@@ -502,10 +547,10 @@ function resetAllData(){
   saveState();
 }
 
-/* ===================== 確認モーダル ===================== */
+/* ===================== 確認モーダル(confirmRoot) ===================== */
 function showConfirm(message, onConfirm, opts){
   opts = opts || {};
-  var root = document.getElementById("modalRoot");
+  var root = document.getElementById("confirmRoot");
   root.innerHTML =
     '<div class="modal-overlay">' +
       '<div class="modal">' +
@@ -520,6 +565,182 @@ function showConfirm(message, onConfirm, opts){
   root.querySelector('[data-modal="ok"]').onclick = function(){ root.innerHTML = ""; onConfirm(); };
 }
 
+/* ===================== 目標 編集・追加モーダル(modalRoot、共通部品) ===================== */
+function openGoalModal(formMode, goal){
+  if(formMode === "edit"){
+    ui.goalForm = Object.assign({}, goal, { formMode:"edit" });
+  } else {
+    ui.goalForm = { formMode:"add", name:"", type:"daily", mode:"check", unit:"", weeks:[] };
+  }
+  renderGoalModal();
+}
+function closeGoalModal(){
+  ui.goalForm = null;
+  document.getElementById("modalRoot").innerHTML = "";
+}
+function renderGoalModal(){
+  var root = document.getElementById("modalRoot");
+  if(!ui.goalForm){ root.innerHTML = ""; return; }
+  var period = getActivePeriod();
+  root.innerHTML = goalModalHtml(ui.goalForm, period);
+}
+function refreshCurrentScreen(){
+  if(ui.screen === "today") renderToday();
+  else if(ui.screen === "graph") renderGraph();
+  else renderSettings();
+}
+
+function goalModalHtml(f, period){
+  var title = f.formMode === "edit" ? "目標を編集" : "目標を追加";
+  var html = '<div class="modal-overlay"><div class="modal modal--form">';
+  html += '<h2>' + title + '</h2>';
+  html += '<div class="form-group"><label class="form-group__label">名前</label>' +
+    '<input type="text" class="form-field" id="gf-name" value="' + esc(f.name || "") + '" placeholder="例: なわとび"></div>';
+  html += '<div class="form-group"><label class="form-group__label">タイプ</label>' +
+    '<select class="form-field" id="gf-type">' +
+      '<option value="daily" ' + (f.type==="daily"?"selected":"") + '>毎日 (daily)</option>' +
+      '<option value="weekly" ' + (f.type==="weekly"?"selected":"") + '>週ごと (weekly)</option>' +
+      '<option value="total" ' + (f.type==="total"?"selected":"") + '>合計 (total)</option>' +
+    '</select></div>';
+
+  if(f.type === "daily"){
+    html += '<div class="form-group"><label class="form-group__label">記録方式</label>' +
+      '<select class="form-field" id="gf-mode">' +
+        '<option value="check" ' + (f.mode==="check"?"selected":"") + '>○×式</option>' +
+        '<option value="number" ' + (f.mode==="number"?"selected":"") + '>数字式</option>' +
+      '</select></div>';
+    if(f.mode === "number"){
+      html += '<div class="form-row">' +
+        '<div class="form-group"><label class="form-group__label">1日の目標</label>' +
+          '<input type="number" inputmode="numeric" class="form-field" id="gf-target" value="' + (f.target!=null?f.target:"") + '"></div>' +
+        '<div class="form-group"><label class="form-group__label">単位</label>' +
+          '<input type="text" class="form-field" id="gf-unit" value="' + esc(f.unit || "") + '" placeholder="例: 回"></div>' +
+      '</div>';
+    }
+  } else if(f.type === "weekly"){
+    html += '<div class="form-group"><label class="form-group__label">単位</label>' +
+      '<input type="text" class="form-field" id="gf-unit" value="' + esc(f.unit || "") + '" placeholder="例: 回"></div>';
+    var totalWeeks = period ? periodTotalWeeks(period) : 1;
+    var weeks = f.weeks && f.weeks.length ? f.weeks.slice() : [];
+    while(weeks.length < totalWeeks) weeks.push(weeks.length ? weeks[weeks.length-1] : 0);
+    html += '<div class="form-group"><label class="form-group__label">週ごとの目標(1日あたり)</label>' +
+      '<div class="weeks-grid">';
+    for(var i=0;i<totalWeeks;i++){
+      html += '<div class="weeks-grid__item"><label>第' + (i+1) + '週</label>' +
+        '<input type="number" inputmode="numeric" class="form-field gf-week" data-week-idx="' + i + '" value="' + weeks[i] + '"></div>';
+    }
+    html += '</div></div>';
+  } else if(f.type === "total"){
+    html += '<div class="form-row">' +
+      '<div class="form-group"><label class="form-group__label">期間中の合計目標</label>' +
+        '<input type="number" inputmode="numeric" class="form-field" id="gf-total-target" value="' + (f.totalTarget!=null?f.totalTarget:"") + '"></div>' +
+      '<div class="form-group"><label class="form-group__label">単位</label>' +
+        '<input type="text" class="form-field" id="gf-unit" value="' + esc(f.unit || "") + '" placeholder="例: ページ"></div>' +
+    '</div>';
+  }
+
+  html += '<div class="form-actions">' +
+    '<button class="btn btn--sub" data-action="goal-form-cancel">キャンセル</button>' +
+    '<button class="btn btn--primary" data-action="goal-form-save">保存</button>' +
+  '</div>';
+  html += '</div></div>';
+  return html;
+}
+
+function readGoalFormFromDom(){
+  var name = document.getElementById("gf-name").value.trim();
+  var type = document.getElementById("gf-type").value;
+  var data = { name: name, type: type };
+  if(type === "daily"){
+    var mode = document.getElementById("gf-mode").value;
+    data.mode = mode;
+    if(mode === "number"){
+      data.target = Number(document.getElementById("gf-target").value);
+      data.unit = document.getElementById("gf-unit").value.trim();
+    }
+  } else if(type === "weekly"){
+    data.unit = document.getElementById("gf-unit").value.trim();
+    var weekInputs = document.querySelectorAll(".gf-week");
+    data.weeks = Array.prototype.map.call(weekInputs, function(inp){ return Number(inp.value) || 0; });
+  } else if(type === "total"){
+    data.totalTarget = Number(document.getElementById("gf-total-target").value);
+    data.unit = document.getElementById("gf-unit").value.trim();
+  }
+  return data;
+}
+function validateGoalData(data){
+  if(!data.name){ alert("名前を入力してね"); return false; }
+  if(data.type === "daily" && data.mode === "number"){
+    if(!data.unit){ alert("単位を入力してね"); return false; }
+    if(!(data.target > 0)){ alert("目標の数字を正しく入力してね"); return false; }
+  }
+  if(data.type === "weekly"){
+    if(!data.unit){ alert("単位を入力してね"); return false; }
+  }
+  if(data.type === "total"){
+    if(!data.unit){ alert("単位を入力してね"); return false; }
+    if(!(data.totalTarget > 0)){ alert("目標の数字を正しく入力してね"); return false; }
+  }
+  return true;
+}
+function syncGoalFormFromDomPartial(){
+  var f = ui.goalForm;
+  var nameEl = document.getElementById("gf-name");
+  if(nameEl) f.name = nameEl.value;
+  var unitEl = document.getElementById("gf-unit");
+  if(unitEl) f.unit = unitEl.value;
+  var targetEl = document.getElementById("gf-target");
+  if(targetEl) f.target = Number(targetEl.value) || 0;
+  var totalTargetEl = document.getElementById("gf-total-target");
+  if(totalTargetEl) f.totalTarget = Number(totalTargetEl.value) || 0;
+  var weekInputs = document.querySelectorAll(".gf-week");
+  if(weekInputs.length) f.weeks = Array.prototype.map.call(weekInputs, function(inp){ return Number(inp.value) || 0; });
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+  var modalRoot = document.getElementById("modalRoot");
+
+  modalRoot.addEventListener("change", function(e){
+    if(!ui.goalForm) return;
+    if(e.target.id === "gf-type"){
+      syncGoalFormFromDomPartial();
+      var type = e.target.value;
+      ui.goalForm.type = type;
+      if(type === "daily" && !ui.goalForm.mode) ui.goalForm.mode = "check";
+      renderGoalModal();
+    } else if(e.target.id === "gf-mode"){
+      syncGoalFormFromDomPartial();
+      ui.goalForm.mode = e.target.value;
+      renderGoalModal();
+    }
+  });
+
+  modalRoot.addEventListener("click", function(e){
+    var btn;
+    if((btn = e.target.closest('[data-action="goal-form-cancel"]'))){
+      closeGoalModal();
+      return;
+    }
+    if((btn = e.target.closest('[data-action="goal-form-save"]'))){
+      var data = readGoalFormFromDom();
+      if(!validateGoalData(data)) return;
+      if(ui.goalForm.formMode === "edit"){
+        var goalId = ui.goalForm.id;
+        showConfirm("目標『" + data.name + "』の設定を変えます。よろしいですか?", function(){
+          updateGoal(goalId, data);
+          closeGoalModal();
+          refreshCurrentScreen();
+        });
+      } else {
+        addGoal(data);
+        closeGoalModal();
+        refreshCurrentScreen();
+      }
+      return;
+    }
+  });
+});
+
 /* ===================== 画面切り替え ===================== */
 function switchScreen(name){
   ui.screen = name;
@@ -529,24 +750,24 @@ function switchScreen(name){
   document.querySelectorAll(".tabbar__btn").forEach(function(b){
     b.classList.toggle("is-active", b.dataset.screen === name);
   });
-  document.getElementById("screenTitle").textContent = { today:"きょう", graph:"グラフ", settings:"せってい" }[name];
+  document.getElementById("screenTitle").textContent = { today:"今日", graph:"グラフ", settings:"設定" }[name];
   if(name === "today") renderToday();
   else if(name === "graph") renderGraph();
   else renderSettings();
 }
 
-/* ===================== きょう画面 ===================== */
+/* ===================== 今日画面 ===================== */
 function renderToday(){
   var el = document.getElementById("screen-today");
   var period = getActivePeriod();
   var goals = getGoalsOfActivePeriod();
 
   if(!period){
-    el.innerHTML = emptyStateHtml("きかんが まだ ありません。\n「せってい」タブから きかんを つくってね!");
+    el.innerHTML = emptyStateHtml("期間がまだありません。\n「設定」タブから期間を作ってね!");
     return;
   }
   if(goals.length === 0){
-    el.innerHTML = emptyStateHtml("もくひょうが まだ ありません。\n「せってい」タブから もくひょうを ついかしてね!");
+    el.innerHTML = emptyStateHtml("目標がまだありません。\n「設定」タブから目標を追加してね!");
     return;
   }
 
@@ -562,7 +783,7 @@ function renderToday(){
   html += '</div>';
 
   if(date !== todayStr()){
-    html += '<div class="today-banner">' + esc(formatMD(date)) + 'の きろくを へんしゅうちゅう</div>';
+    html += '<div class="today-banner">' + esc(formatMD(date)) + 'の記録を編集中</div>';
   }
 
   goals.forEach(function(goal){
@@ -575,8 +796,15 @@ function renderToday(){
 function emptyStateHtml(text){
   return '<div class="empty-state">' +
     '<div class="empty-state__text">' + esc(text) + '</div>' +
-    '<button class="btn btn--primary" data-action="goto-settings">せっていへ いく</button>' +
+    '<button class="btn btn--primary" data-action="goto-settings">設定へ行く</button>' +
     '</div>';
+}
+
+function goalCardHeaderHtml(goal, extra){
+  return '<div class="goal-card__header">' +
+    '<div class="goal-card__title">' + esc(goal.name) + (extra || "") + '</div>' +
+    '<button class="goal-card__edit-btn" data-action="edit-goal" data-id="' + goal.id + '" aria-label="目標を編集">✏️</button>' +
+  '</div>';
 }
 
 function goalCardHtml(goal, date, period){
@@ -584,7 +812,7 @@ function goalCardHtml(goal, date, period){
   if(goal.type === "daily" && goal.mode === "check"){
     var done = !!rec && rec.value === 1;
     return '<div class="goal-card">' +
-      '<div class="goal-card__title">' + esc(goal.name) + '</div>' +
+      goalCardHeaderHtml(goal) +
       '<button class="goal-card__big-btn ' + (done ? "is-done" : "") + '" data-action="toggle-check" data-goal-id="' + goal.id + '">' +
         (done ? "できた! ✅" : "できた!") +
       '</button>' +
@@ -594,13 +822,13 @@ function goalCardHtml(goal, date, period){
     var val = rec ? rec.value : "";
     var achieved = !!rec && rec.value >= goal.target;
     return '<div class="goal-card">' +
-      '<div class="goal-card__title">' + esc(goal.name) + '</div>' +
-      '<div class="goal-card__target">もくひょう: ' + goal.target + esc(goal.unit) + '</div>' +
+      goalCardHeaderHtml(goal) +
+      '<div class="goal-card__target">目標: ' + goal.target + esc(goal.unit) + '</div>' +
       '<div class="goal-card__input-row">' +
         '<input type="number" inputmode="numeric" class="goal-card__input" data-goal-input="' + goal.id + '" value="' + val + '">' +
-        '<button class="btn btn--primary" data-action="record-number" data-goal-id="' + goal.id + '">きろく</button>' +
+        '<button class="btn btn--primary" data-action="record-number" data-goal-id="' + goal.id + '">記録</button>' +
       '</div>' +
-      (achieved ? '<div class="goal-card__achieved">✅ たっせい!</div>' : '') +
+      (achieved ? '<div class="goal-card__achieved">✅ 達成!</div>' : '') +
     '</div>';
   }
   if(goal.type === "weekly"){
@@ -609,13 +837,13 @@ function goalCardHtml(goal, date, period){
     var wval = rec ? rec.value : "";
     var wachieved = !!rec && rec.value >= target;
     return '<div class="goal-card">' +
-      '<div class="goal-card__title">' + esc(goal.name) + '<span class="goal-card__week">だい' + weekNum + 'しゅうめ</span></div>' +
-      '<div class="goal-card__target">もくひょう: ' + target + esc(goal.unit) + '</div>' +
+      goalCardHeaderHtml(goal, '<span class="goal-card__week">第' + weekNum + '週</span>') +
+      '<div class="goal-card__target">目標: ' + target + esc(goal.unit) + '</div>' +
       '<div class="goal-card__input-row">' +
         '<input type="number" inputmode="numeric" class="goal-card__input" data-goal-input="' + goal.id + '" value="' + wval + '">' +
-        '<button class="btn btn--primary" data-action="record-number" data-goal-id="' + goal.id + '">きろく</button>' +
+        '<button class="btn btn--primary" data-action="record-number" data-goal-id="' + goal.id + '">記録</button>' +
       '</div>' +
-      (wachieved ? '<div class="goal-card__achieved">✅ たっせい!</div>' : '') +
+      (wachieved ? '<div class="goal-card__achieved">✅ 達成!</div>' : '') +
     '</div>';
   }
   if(goal.type === "total"){
@@ -623,14 +851,14 @@ function goalCardHtml(goal, date, period){
     var tval = rec ? rec.value : "";
     var remain = Math.max(goal.totalTarget - sum, 0);
     return '<div class="goal-card">' +
-      '<div class="goal-card__title">' + esc(goal.name) + '</div>' +
-      '<div class="goal-card__target">きょう すすんだ ' + esc(goal.unit) + 'すう</div>' +
+      goalCardHeaderHtml(goal) +
+      '<div class="goal-card__target">今日進んだ' + esc(goal.unit) + '数</div>' +
       '<div class="goal-card__input-row">' +
         '<input type="number" inputmode="numeric" class="goal-card__input" data-goal-input="' + goal.id + '" value="' + tval + '">' +
-        '<button class="btn btn--primary" data-action="record-number" data-goal-id="' + goal.id + '">きろく</button>' +
+        '<button class="btn btn--primary" data-action="record-number" data-goal-id="' + goal.id + '">記録</button>' +
       '</div>' +
-      '<div class="goal-card__total-info">ごうけい ' + sum + '/' + goal.totalTarget + ' ' + esc(goal.unit) + '</div>' +
-      '<div class="goal-card__total-info">のこり ' + remain + ' ' + esc(goal.unit) + '</div>' +
+      '<div class="goal-card__total-info">合計 ' + sum + '/' + goal.totalTarget + ' ' + esc(goal.unit) + '</div>' +
+      '<div class="goal-card__total-info">残り ' + remain + ' ' + esc(goal.unit) + '</div>' +
     '</div>';
   }
   return "";
@@ -655,7 +883,7 @@ function onDailyCheckClick(goalId){
     setRecord(date, goalId, 1);
     renderToday();
   } else {
-    showConfirm(formatMD(date) + "の『" + goal.name + "』のきろくを とりけします。いいですか?", function(){
+    showConfirm(formatMD(date) + "の『" + goal.name + "』の記録を取り消します。よろしいですか?", function(){
       deleteRecord(date, goalId);
       renderToday();
     });
@@ -667,14 +895,14 @@ function onRecordNumberClick(goalId){
   var input = document.querySelector('[data-goal-input="' + goalId + '"]');
   var raw = input.value;
   if(raw === "" || isNaN(Number(raw)) || Number(raw) < 0){
-    alert("すうじを ただしく にゅうりょくしてね");
+    alert("数字を正しく入力してね");
     return;
   }
   var value = Number(raw);
   var date = ui.todayDate;
   var existing = findRecord(date, goalId);
   if(existing && existing.value !== value){
-    showConfirm(formatMD(date) + "の『" + goal.name + "』のきろくを " + existing.value + esc(goal.unit || "") + " → " + value + esc(goal.unit || "") + " にかえます。いいですか?", function(){
+    showConfirm(formatMD(date) + "の『" + goal.name + "』の記録を " + existing.value + esc(goal.unit || "") + " → " + value + esc(goal.unit || "") + " に変えます。よろしいですか?", function(){
       setRecord(date, goalId, value);
       renderToday();
     });
@@ -692,6 +920,7 @@ document.addEventListener("DOMContentLoaded", function(){
     if((btn = e.target.closest('[data-action="goto-settings"]'))) return switchScreen("settings");
     if((btn = e.target.closest('[data-action="toggle-check"]'))) return onDailyCheckClick(btn.dataset.goalId);
     if((btn = e.target.closest('[data-action="record-number"]'))) return onRecordNumberClick(btn.dataset.goalId);
+    if((btn = e.target.closest('[data-action="edit-goal"]'))) return openGoalModal("edit", state.goals.find(function(g){ return g.id === btn.dataset.id; }));
   });
 });
 
@@ -702,11 +931,11 @@ function renderGraph(){
   var goals = getGoalsOfActivePeriod();
 
   if(!period){
-    el.innerHTML = emptyStateHtml("きかんが まだ ありません。\n「せってい」タブから きかんを つくってね!");
+    el.innerHTML = emptyStateHtml("期間がまだありません。\n「設定」タブから期間を作ってね!");
     return;
   }
   if(goals.length === 0){
-    el.innerHTML = emptyStateHtml("もくひょうが まだ ありません。\n「せってい」タブから もくひょうを ついかしてね!");
+    el.innerHTML = emptyStateHtml("目標がまだありません。\n「設定」タブから目標を追加してね!");
     return;
   }
 
@@ -746,14 +975,21 @@ function summaryCardHtml(period, goals){
   var rate = goals.length ? Math.round(achievedCount / goals.length * 100) : 0;
 
   return '<div class="summary-card">' +
-    '<div class="summary-card__row"><span>きかん</span><span>' + esc(period.name) + '</span></div>' +
-    '<div class="summary-card__row"><span>けいかにっすう</span><span>' + elapsed + ' / ' + totalDays + ' にち</span></div>' +
-    '<div class="summary-card__row"><span>きょうの たっせいりつ</span><span>' + rate + '% (' + achievedCount + '/' + goals.length + ')</span></div>' +
+    '<div class="summary-card__row"><span>期間</span><span>' + esc(period.name) + '</span></div>' +
+    '<div class="summary-card__row"><span>経過日数</span><span>' + elapsed + ' / ' + totalDays + ' 日</span></div>' +
+    '<div class="summary-card__row"><span>今日の達成率</span><span>' + rate + '% (' + achievedCount + '/' + goals.length + ')</span></div>' +
   '</div>';
 }
 
 function svgLine(points){
   return points.map(function(p, i){ return (i===0?"M":"L") + p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" ");
+}
+
+function graphCardHeaderHtml(goal){
+  return '<div class="graph-card__header">' +
+    '<div class="graph-card__title">' + esc(goal.name) + '</div>' +
+    '<button class="goal-card__edit-btn" data-action="edit-goal" data-id="' + goal.id + '" aria-label="目標を編集">✏️</button>' +
+  '</div>';
 }
 
 function totalGraphCardHtml(goal, period){
@@ -785,21 +1021,21 @@ function totalGraphCardHtml(goal, period){
   var idealToday = goal.totalTarget * (todayIdx / Math.max(n-1,1));
   var note;
   if(actualToday >= idealToday){
-    note = "よていより はやい!";
+    note = "予定より早い!";
   } else {
-    note = "あと" + Math.ceil(idealToday - actualToday) + esc(goal.unit) + "で よていどおり!";
+    note = "あと" + Math.ceil(idealToday - actualToday) + esc(goal.unit) + "で予定通り!";
   }
 
   var svg = '<svg class="graph-card__svg" viewBox="0 0 ' + W + ' ' + H + '">' +
-    '<line x1="' + padL + '" y1="' + (H-padB) + '" x2="' + (W-padR) + '" y2="' + (H-padB) + '" stroke="#ccc"/>' +
-    '<line x1="' + padL + '" y1="' + padT + '" x2="' + padL + '" y2="' + (H-padB) + '" stroke="#ccc"/>' +
-    '<text x="' + padL + '" y="10" font-size="9" fill="#999">' + goal.totalTarget + esc(goal.unit) + '</text>' +
-    '<path d="' + svgLine(idealPoints) + '" fill="none" stroke="#bbb" stroke-width="2" stroke-dasharray="4,3"/>' +
-    '<path d="' + svgLine(actualPoints) + '" fill="none" stroke="#2f6fed" stroke-width="2.5"/>' +
+    '<line x1="' + padL + '" y1="' + (H-padB) + '" x2="' + (W-padR) + '" y2="' + (H-padB) + '" stroke="var(--color-axis)"/>' +
+    '<line x1="' + padL + '" y1="' + padT + '" x2="' + padL + '" y2="' + (H-padB) + '" stroke="var(--color-axis)"/>' +
+    '<text x="' + padL + '" y="10" font-size="9" fill="var(--color-axis-text)">' + goal.totalTarget + esc(goal.unit) + '</text>' +
+    '<path d="' + svgLine(idealPoints) + '" fill="none" stroke="var(--color-ideal-line)" stroke-width="2" stroke-dasharray="4,3"/>' +
+    '<path d="' + svgLine(actualPoints) + '" fill="none" stroke="var(--color-main)" stroke-width="2.5"/>' +
     '</svg>';
 
   return '<div class="graph-card">' +
-    '<div class="graph-card__title">' + esc(goal.name) + '</div>' +
+    graphCardHeaderHtml(goal) +
     svg +
     '<div class="graph-card__note">' + note + '</div>' +
   '</div>';
@@ -845,7 +1081,7 @@ function longestStreak(map, period){
   }
   return longest;
 }
-var WEEKDAY_LABELS = ["にち","げつ","か","すい","もく","きん","ど"];
+var WEEKDAY_LABELS = ["日","月","火","水","木","金","土"];
 
 function calendarHtml(map, period){
   var html = '<div class="calendar">';
@@ -858,7 +1094,7 @@ function calendarHtml(map, period){
     if(monthKey !== curMonth){
       if(monthOpen) html += '</div>';
       curMonth = monthKey;
-      html += '<div class="calendar__month-title">' + Number(parts[1]) + 'がつ</div>';
+      html += '<div class="calendar__month-title">' + Number(parts[1]) + '月</div>';
       html += '<div class="calendar__grid">';
       WEEKDAY_LABELS.forEach(function(w){ html += '<div class="calendar__weekday">' + w + '</div>'; });
       var wd = parseDate(d).getDay();
@@ -883,14 +1119,14 @@ function dailyGraphCardHtml(goal, period){
   var streak = currentStreak(map, period);
   var longest = longestStreak(map, period);
   return '<div class="graph-card">' +
-    '<div class="graph-card__title">' + esc(goal.name) + '</div>' +
-    '<div class="graph-card__streak">🔥 ' + streak + 'にち れんぞく! (さいちょう ' + longest + 'にち)</div>' +
+    graphCardHeaderHtml(goal) +
+    '<div class="graph-card__streak">🔥 ' + streak + '日連続!(最長' + longest + '日)</div>' +
     calendarHtml(map, period) +
   '</div>';
 }
 
 function weeklyGraphCardHtml(goal, period){
-  var totalWeeks = periodTotalWeeks(goal.type === "weekly" ? period : period);
+  var totalWeeks = periodTotalWeeks(period);
   var weeks = [];
   for(var w=1; w<=totalWeeks; w++){
     var target = weeklyTargetFor(goal, w);
@@ -918,13 +1154,13 @@ function weeklyGraphCardHtml(goal, period){
     var barY = sy(x.avg);
     var barH = (H-padB) - barY;
     var tickY = sy(x.target);
-    return '<rect x="' + barX.toFixed(1) + '" y="' + barY.toFixed(1) + '" width="' + barW.toFixed(1) + '" height="' + Math.max(barH,0).toFixed(1) + '" fill="#2f6fed" rx="2"/>' +
-      '<line x1="' + (barX-2).toFixed(1) + '" y1="' + tickY.toFixed(1) + '" x2="' + (barX+barW+2).toFixed(1) + '" y2="' + tickY.toFixed(1) + '" stroke="#e5484d" stroke-width="2"/>' +
-      '<text x="' + cx.toFixed(1) + '" y="' + (H-6) + '" font-size="9" fill="#999" text-anchor="middle">' + x.week + 'W</text>';
+    return '<rect x="' + barX.toFixed(1) + '" y="' + barY.toFixed(1) + '" width="' + barW.toFixed(1) + '" height="' + Math.max(barH,0).toFixed(1) + '" fill="var(--color-main)" rx="2"/>' +
+      '<line x1="' + (barX-2).toFixed(1) + '" y1="' + tickY.toFixed(1) + '" x2="' + (barX+barW+2).toFixed(1) + '" y2="' + tickY.toFixed(1) + '" stroke="var(--color-danger)" stroke-width="2"/>' +
+      '<text x="' + cx.toFixed(1) + '" y="' + (H-6) + '" font-size="9" fill="var(--color-axis-text)" text-anchor="middle">' + x.week + 'W</text>';
   }).join("");
 
   var svg = '<svg class="graph-card__svg" viewBox="0 0 ' + W + ' ' + H + '">' +
-    '<line x1="' + padL + '" y1="' + (H-padB) + '" x2="' + (W-padR) + '" y2="' + (H-padB) + '" stroke="#ccc"/>' +
+    '<line x1="' + padL + '" y1="' + (H-padB) + '" x2="' + (W-padR) + '" y2="' + (H-padB) + '" stroke="var(--color-axis)"/>' +
     bars +
     '</svg>';
 
@@ -939,13 +1175,20 @@ function weeklyGraphCardHtml(goal, period){
   }
 
   return '<div class="graph-card">' +
-    '<div class="graph-card__title">' + esc(goal.name) + '</div>' +
+    graphCardHeaderHtml(goal) +
     svg +
     calendarHtml(achievedMapForCalendar, period) +
   '</div>';
 }
 
-/* ===================== せってい画面 ===================== */
+document.addEventListener("DOMContentLoaded", function(){
+  document.getElementById("screen-graph").addEventListener("click", function(e){
+    var btn = e.target.closest('[data-action="edit-goal"]');
+    if(btn) return openGoalModal("edit", state.goals.find(function(g){ return g.id === btn.dataset.id; }));
+  });
+});
+
+/* ===================== 設定画面 ===================== */
 function renderSettings(){
   var el = document.getElementById("screen-settings");
   var html = "";
@@ -957,18 +1200,18 @@ function renderSettings(){
 
 function periodSectionHtml(){
   var html = '<div class="settings-section">';
-  html += '<h2 class="settings-section__title">きかんの かんり</h2>';
+  html += '<h2 class="settings-section__title">期間の管理</h2>';
   state.periods.forEach(function(p){
     var isActive = p.id === state.activePeriodId;
     html += '<div class="list-row">' +
       '<div class="list-row__main">' +
-        '<div class="list-row__name">' + esc(p.name) + (isActive ? '<span class="badge badge--active">つかいちゅう</span>' : '') + '</div>' +
+        '<div class="list-row__name">' + esc(p.name) + (isActive ? '<span class="badge badge--active">使用中</span>' : '') + '</div>' +
         '<div class="list-row__sub">' + esc(p.start) + ' 〜 ' + esc(p.end) + '</div>' +
       '</div>' +
       '<div class="list-row__actions">' +
-        (isActive ? '' : '<button class="btn btn--sub btn--small" data-action="open-period" data-id="' + p.id + '">ひらく</button>') +
-        '<button class="btn btn--sub btn--small" data-action="edit-period" data-id="' + p.id + '">へんしゅう</button>' +
-        '<button class="btn btn--danger btn--small" data-action="delete-period" data-id="' + p.id + '">さくじょ</button>' +
+        (isActive ? '' : '<button class="btn btn--sub btn--small" data-action="open-period" data-id="' + p.id + '">開く</button>') +
+        '<button class="btn btn--sub btn--small" data-action="edit-period" data-id="' + p.id + '">編集</button>' +
+        '<button class="btn btn--danger btn--small" data-action="delete-period" data-id="' + p.id + '">削除</button>' +
       '</div>' +
     '</div>';
   });
@@ -976,7 +1219,7 @@ function periodSectionHtml(){
   if(ui.periodForm){
     html += periodFormHtml(ui.periodForm);
   } else {
-    html += '<button class="btn btn--primary btn--block" data-action="add-period-open">＋ きかんを ついかする</button>';
+    html += '<button class="btn btn--primary btn--block" data-action="add-period-open">＋ 期間を追加する</button>';
   }
   html += '</div>';
   return html;
@@ -985,22 +1228,22 @@ function periodSectionHtml(){
 function periodFormHtml(f){
   return '<div class="form-panel">' +
     '<div class="form-group">' +
-      '<label class="form-group__label">なまえ</label>' +
-      '<input type="text" class="form-field" id="pf-name" value="' + esc(f.name || "") + '" placeholder="れい: 2026年 なつやすみ">' +
+      '<label class="form-group__label">名前</label>' +
+      '<input type="text" class="form-field" id="pf-name" value="' + esc(f.name || "") + '" placeholder="例: 2026年 夏休み">' +
     '</div>' +
     '<div class="form-row">' +
       '<div class="form-group">' +
-        '<label class="form-group__label">はじまり</label>' +
+        '<label class="form-group__label">開始</label>' +
         '<input type="date" class="form-field" id="pf-start" value="' + esc(f.start || "") + '">' +
       '</div>' +
       '<div class="form-group">' +
-        '<label class="form-group__label">おわり</label>' +
+        '<label class="form-group__label">終了</label>' +
         '<input type="date" class="form-field" id="pf-end" value="' + esc(f.end || "") + '">' +
       '</div>' +
     '</div>' +
     '<div class="form-actions">' +
       '<button class="btn btn--sub" data-action="period-form-cancel">キャンセル</button>' +
-      '<button class="btn btn--primary" data-action="period-form-save">ほぞん</button>' +
+      '<button class="btn btn--primary" data-action="period-form-save">保存</button>' +
     '</div>' +
   '</div>';
 }
@@ -1008,19 +1251,19 @@ function periodFormHtml(f){
 function goalSectionHtml(){
   var period = getActivePeriod();
   var html = '<div class="settings-section">';
-  html += '<h2 class="settings-section__title">もくひょうの かんり</h2>';
+  html += '<h2 class="settings-section__title">目標の管理</h2>';
   if(!period){
-    html += '<div class="empty-state__text" style="margin:0 0 10px;">さきに きかんを つくってね</div>';
+    html += '<div class="empty-state__text" style="margin:0 0 10px;">先に期間を作ってね</div>';
     html += '</div>';
     return html;
   }
   var goals = getGoalsOfActivePeriod();
-  var typeLabel = { daily:"まいにち", weekly:"しゅうごと", total:"ごうけい" };
+  var typeLabel = { daily:"毎日", weekly:"週ごと", total:"合計" };
   goals.forEach(function(g, i){
     var sub = "";
-    if(g.type === "daily") sub = g.mode === "check" ? "○×しき" : ("もくひょう " + g.target + esc(g.unit));
-    else if(g.type === "weekly") sub = "しゅうべつ もくひょう (" + esc(g.unit) + ")";
-    else if(g.type === "total") sub = "ごうけい " + g.totalTarget + esc(g.unit);
+    if(g.type === "daily") sub = g.mode === "check" ? "○×式" : ("目標 " + g.target + esc(g.unit));
+    else if(g.type === "weekly") sub = "週別目標(" + esc(g.unit) + ")";
+    else if(g.type === "total") sub = "合計 " + g.totalTarget + esc(g.unit);
     html += '<div class="list-row">' +
       '<div class="list-row__main">' +
         '<div class="list-row__name">' + esc(g.name) + '<span class="badge">' + typeLabel[g.type] + '</span></div>' +
@@ -1029,152 +1272,27 @@ function goalSectionHtml(){
       '<div class="list-row__actions">' +
         '<button class="btn btn--sub btn--small" data-action="goal-move-up" data-id="' + g.id + '" ' + (i===0?"disabled":"") + '>↑</button>' +
         '<button class="btn btn--sub btn--small" data-action="goal-move-down" data-id="' + g.id + '" ' + (i===goals.length-1?"disabled":"") + '>↓</button>' +
-        '<button class="btn btn--sub btn--small" data-action="edit-goal" data-id="' + g.id + '">へんしゅう</button>' +
-        '<button class="btn btn--danger btn--small" data-action="delete-goal" data-id="' + g.id + '">さくじょ</button>' +
+        '<button class="btn btn--sub btn--small" data-action="edit-goal" data-id="' + g.id + '">編集</button>' +
+        '<button class="btn btn--danger btn--small" data-action="delete-goal" data-id="' + g.id + '">削除</button>' +
       '</div>' +
     '</div>';
   });
 
-  if(ui.goalForm){
-    html += goalFormHtml(ui.goalForm, period);
-  } else {
-    html += '<button class="btn btn--primary btn--block" data-action="add-goal-open">＋ もくひょうを ついかする</button>';
-  }
-  html += '</div>';
-  return html;
-}
-
-function goalFormHtml(f, period){
-  var html = '<div class="form-panel">';
-  html += '<div class="form-group"><label class="form-group__label">なまえ</label>' +
-    '<input type="text" class="form-field" id="gf-name" value="' + esc(f.name || "") + '" placeholder="れい: なわとび"></div>';
-  html += '<div class="form-group"><label class="form-group__label">タイプ</label>' +
-    '<select class="form-field" id="gf-type">' +
-      '<option value="daily" ' + (f.type==="daily"?"selected":"") + '>まいにち (daily)</option>' +
-      '<option value="weekly" ' + (f.type==="weekly"?"selected":"") + '>しゅうごと (weekly)</option>' +
-      '<option value="total" ' + (f.type==="total"?"selected":"") + '>ごうけい (total)</option>' +
-    '</select></div>';
-
-  if(f.type === "daily"){
-    html += '<div class="form-group"><label class="form-group__label">きろく方式</label>' +
-      '<select class="form-field" id="gf-mode">' +
-        '<option value="check" ' + (f.mode==="check"?"selected":"") + '>○×しき</option>' +
-        '<option value="number" ' + (f.mode==="number"?"selected":"") + '>すうじしき</option>' +
-      '</select></div>';
-    if(f.mode === "number"){
-      html += '<div class="form-row">' +
-        '<div class="form-group"><label class="form-group__label">1にちの もくひょう</label>' +
-          '<input type="number" inputmode="numeric" class="form-field" id="gf-target" value="' + (f.target!=null?f.target:"") + '"></div>' +
-        '<div class="form-group"><label class="form-group__label">たんい</label>' +
-          '<input type="text" class="form-field" id="gf-unit" value="' + esc(f.unit || "") + '" placeholder="れい: かい"></div>' +
-      '</div>';
-    }
-  } else if(f.type === "weekly"){
-    html += '<div class="form-group"><label class="form-group__label">たんい</label>' +
-      '<input type="text" class="form-field" id="gf-unit" value="' + esc(f.unit || "") + '" placeholder="れい: かい"></div>';
-    var totalWeeks = period ? periodTotalWeeks(period) : 1;
-    var weeks = f.weeks && f.weeks.length ? f.weeks.slice() : [];
-    while(weeks.length < totalWeeks) weeks.push(weeks.length ? weeks[weeks.length-1] : 0);
-    html += '<div class="form-group"><label class="form-group__label">しゅうごとの もくひょう(1にちあたり)</label>' +
-      '<div class="weeks-grid">';
-    for(var i=0;i<totalWeeks;i++){
-      html += '<div class="weeks-grid__item"><label>だい' + (i+1) + 'しゅう</label>' +
-        '<input type="number" inputmode="numeric" class="form-field gf-week" data-week-idx="' + i + '" value="' + weeks[i] + '"></div>';
-    }
-    html += '</div></div>';
-  } else if(f.type === "total"){
-    html += '<div class="form-row">' +
-      '<div class="form-group"><label class="form-group__label">きかんちゅうの ごうけいもくひょう</label>' +
-        '<input type="number" inputmode="numeric" class="form-field" id="gf-total-target" value="' + (f.totalTarget!=null?f.totalTarget:"") + '"></div>' +
-      '<div class="form-group"><label class="form-group__label">たんい</label>' +
-        '<input type="text" class="form-field" id="gf-unit" value="' + esc(f.unit || "") + '" placeholder="れい: ページ"></div>' +
-    '</div>';
-  }
-
-  html += '<div class="form-actions">' +
-    '<button class="btn btn--sub" data-action="goal-form-cancel">キャンセル</button>' +
-    '<button class="btn btn--primary" data-action="goal-form-save">ほぞん</button>' +
-  '</div>';
+  html += '<button class="btn btn--primary btn--block" data-action="add-goal-open">＋ 目標を追加する</button>';
   html += '</div>';
   return html;
 }
 
 function resetSectionHtml(){
   return '<div class="settings-section">' +
-    '<h2 class="settings-section__title">きろくを リセット</h2>' +
-    '<button class="btn btn--danger btn--block" data-action="reset-all">ぜんぶの きろくを けす</button>' +
+    '<h2 class="settings-section__title">記録をリセット</h2>' +
+    '<button class="btn btn--danger btn--block" data-action="reset-all">すべての記録を削除</button>' +
   '</div>';
 }
 
 /* ---- 設定画面イベント ---- */
-function readGoalFormFromDom(){
-  var f = ui.goalForm;
-  var name = document.getElementById("gf-name").value.trim();
-  var type = document.getElementById("gf-type").value;
-  var data = { name: name, type: type };
-  if(type === "daily"){
-    var mode = document.getElementById("gf-mode").value;
-    data.mode = mode;
-    if(mode === "number"){
-      data.target = Number(document.getElementById("gf-target").value);
-      data.unit = document.getElementById("gf-unit").value.trim();
-    }
-  } else if(type === "weekly"){
-    data.unit = document.getElementById("gf-unit").value.trim();
-    var weekInputs = document.querySelectorAll(".gf-week");
-    data.weeks = Array.prototype.map.call(weekInputs, function(inp){ return Number(inp.value) || 0; });
-  } else if(type === "total"){
-    data.totalTarget = Number(document.getElementById("gf-total-target").value);
-    data.unit = document.getElementById("gf-unit").value.trim();
-  }
-  return data;
-}
-function validateGoalData(data){
-  if(!data.name){ alert("なまえを にゅうりょくしてね"); return false; }
-  if(data.type === "daily" && data.mode === "number"){
-    if(!data.unit){ alert("たんいを にゅうりょくしてね"); return false; }
-    if(!(data.target > 0)){ alert("もくひょうの すうじを ただしく にゅうりょくしてね"); return false; }
-  }
-  if(data.type === "weekly"){
-    if(!data.unit){ alert("たんいを にゅうりょくしてね"); return false; }
-  }
-  if(data.type === "total"){
-    if(!data.unit){ alert("たんいを にゅうりょくしてね"); return false; }
-    if(!(data.totalTarget > 0)){ alert("もくひょうの すうじを ただしく にゅうりょくしてね"); return false; }
-  }
-  return true;
-}
-
-function syncGoalFormFromDomPartial(){
-  var f = ui.goalForm;
-  var nameEl = document.getElementById("gf-name");
-  if(nameEl) f.name = nameEl.value;
-  var unitEl = document.getElementById("gf-unit");
-  if(unitEl) f.unit = unitEl.value;
-  var targetEl = document.getElementById("gf-target");
-  if(targetEl) f.target = Number(targetEl.value) || 0;
-  var totalTargetEl = document.getElementById("gf-total-target");
-  if(totalTargetEl) f.totalTarget = Number(totalTargetEl.value) || 0;
-  var weekInputs = document.querySelectorAll(".gf-week");
-  if(weekInputs.length) f.weeks = Array.prototype.map.call(weekInputs, function(inp){ return Number(inp.value) || 0; });
-}
-
 document.addEventListener("DOMContentLoaded", function(){
   var settingsEl = document.getElementById("screen-settings");
-
-  settingsEl.addEventListener("change", function(e){
-    if(e.target.id === "gf-type"){
-      syncGoalFormFromDomPartial();
-      var type = e.target.value;
-      ui.goalForm.type = type;
-      if(type === "daily" && !ui.goalForm.mode) ui.goalForm.mode = "check";
-      renderSettings();
-    } else if(e.target.id === "gf-mode"){
-      syncGoalFormFromDomPartial();
-      ui.goalForm.mode = e.target.value;
-      renderSettings();
-    }
-  });
 
   settingsEl.addEventListener("click", function(e){
     var btn;
@@ -1196,15 +1314,15 @@ document.addEventListener("DOMContentLoaded", function(){
       var name = document.getElementById("pf-name").value.trim();
       var start = document.getElementById("pf-start").value;
       var end = document.getElementById("pf-end").value;
-      if(!name || !start || !end){ alert("にゅうりょくないようを かくにんしてね"); return; }
-      if(start > end){ alert("はじまりは おわりより まえの ひづけにしてね"); return; }
+      if(!name || !start || !end){ alert("入力内容を確認してね"); return; }
+      if(start > end){ alert("開始は終了より前の日付にしてね"); return; }
       var f = ui.periodForm;
       if(f.mode === "add"){
         addPeriod({ name:name, start:start, end:end });
         ui.periodForm = null;
         renderSettings();
       } else {
-        showConfirm("きかん『" + name + "』の せっていを かえます。いいですか?", function(){
+        showConfirm("期間『" + name + "』の設定を変えます。よろしいですか?", function(){
           updatePeriod(f.id, { name:name, start:start, end:end });
           ui.periodForm = null;
           renderSettings();
@@ -1218,7 +1336,7 @@ document.addEventListener("DOMContentLoaded", function(){
     }
     if((btn = e.target.closest('[data-action="delete-period"]'))){
       var p2 = state.periods.find(function(x){ return x.id === btn.dataset.id; });
-      showConfirm("きかん『" + p2.name + "』を けします。もくひょうと きろくも ぜんぶ きえます。いいですか?", function(){
+      showConfirm("期間『" + p2.name + "』を削除します。目標と記録も全部消えます。よろしいですか?", function(){
         deletePeriod(p2.id);
         renderSettings();
       }, { danger:true });
@@ -1226,35 +1344,11 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     if((btn = e.target.closest('[data-action="add-goal-open"]'))){
-      ui.goalForm = { formMode:"add", name:"", type:"daily", mode:"check", unit:"", weeks:[] };
-      return renderSettings();
+      return openGoalModal("add");
     }
     if((btn = e.target.closest('[data-action="edit-goal"]'))){
       var g = state.goals.find(function(x){ return x.id === btn.dataset.id; });
-      ui.goalForm = Object.assign({}, g, { formMode:"edit" });
-      return renderSettings();
-    }
-    if((btn = e.target.closest('[data-action="goal-form-cancel"]'))){
-      ui.goalForm = null;
-      return renderSettings();
-    }
-    if((btn = e.target.closest('[data-action="goal-form-save"]'))){
-      var data = readGoalFormFromDom();
-      if(!validateGoalData(data)) return;
-      if(ui.goalForm.formMode === "edit"){
-        var goalId = ui.goalForm.id;
-        var existingGoal = state.goals.find(function(x){ return x.id === goalId; });
-        showConfirm("もくひょう『" + data.name + "』の せっていを かえます。いいですか?", function(){
-          updateGoal(goalId, data);
-          ui.goalForm = null;
-          renderSettings();
-        });
-      } else {
-        addGoal(data);
-        ui.goalForm = null;
-        renderSettings();
-      }
-      return;
+      return openGoalModal("edit", g);
     }
     if((btn = e.target.closest('[data-action="goal-move-up"]'))){
       moveGoal(btn.dataset.id, -1);
@@ -1266,18 +1360,18 @@ document.addEventListener("DOMContentLoaded", function(){
     }
     if((btn = e.target.closest('[data-action="delete-goal"]'))){
       var g2 = state.goals.find(function(x){ return x.id === btn.dataset.id; });
-      showConfirm("もくひょう『" + g2.name + "』を けします。きろくも きえます。いいですか?", function(){
+      showConfirm("目標『" + g2.name + "』を削除します。記録も消えます。よろしいですか?", function(){
         deleteGoal(g2.id);
         renderSettings();
       }, { danger:true });
       return;
     }
     if((btn = e.target.closest('[data-action="reset-all"]'))){
-      showConfirm("ぜんぶの きろくを けします。いいですか?", function(){
-        showConfirm("ほんとうに けしますか? もとに もどせません", function(){
+      showConfirm("すべての記録を削除します。よろしいですか?", function(){
+        showConfirm("本当に削除しますか?元に戻せません", function(){
           resetAllData();
           switchScreen("today");
-        }, { danger:true, okLabel:"けす" });
+        }, { danger:true, okLabel:"削除" });
       }, { danger:true });
       return;
     }
