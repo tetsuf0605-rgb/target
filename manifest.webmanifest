@@ -1,6 +1,6 @@
 {
-  "name": "target",
-  "short_name": "target",
+  "name": "チェックシート",
+  "short_name": "チェックシート",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
